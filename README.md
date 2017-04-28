@@ -1,2 +1,2 @@
-# yfirbord-grovepi
-Yfirbord GrovePi, the open source environmental black-box.
+# Yfirbord GrovePi
+Yfirbord GrovePi, the open source environmental monitor.
