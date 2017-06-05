@@ -24,3 +24,4 @@ _testmain.go
 *.prof
 .history
 yfirbord-grovepi
+.gopath
