@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"./grovepi"
+	"github.com/LuCavallin/yfirbord-grovepi/grovepi"
 )
 
 func main() {
