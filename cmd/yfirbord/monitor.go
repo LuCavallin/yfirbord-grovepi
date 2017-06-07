@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/LuCavallin/yfirbord-grovepi/grovepi"
+	"github.com/LuCavallin/yfirbord-grovepi/pkg/grovepi"
 )
 
 func main() {
 	var g grovepi.GrovePi
 	g = *grovepi.InitGrovePi(0x04)
-	err := g.PinMode(grovepi.D2, "output")
+	err := g.PinMode(grovepi.D2, "input")
 	if err != nil {
 		fmt.Println(err)
 	}
