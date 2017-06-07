@@ -15,9 +15,11 @@ func main() {
 		fmt.Println(err)
 	}
 	for {
-		g.DigitalWrite(grovepi.D2, 1)
-		time.Sleep(500 * time.Millisecond)
-		g.DigitalWrite(grovepi.D2, 0)
+		tmp, hum, err := g.ReadDHT(grovepi.D2)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Printf("Temperature: %f - Humidity: %f\n", tmp, hum)
 		time.Sleep(500 * time.Millisecond)
 	}
 }
