@@ -1,25 +1,28 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"time"
 
-	"github.com/LuCavallin/yfirbord-grovepi/pkg/grovepi"
+	"github.com/LuCavallin/yfirbord-grovepi/grovepi"
 )
 
 func main() {
-	var g grovepi.GrovePi
-	g = *grovepi.InitGrovePi(0x04)
-	err := g.PinMode(grovepi.D2, "input")
+	g, err := grovepi.Init(0x04)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
+	defer g.Close()
+
+	err = g.PinMode(grovepi.D2, grovepi.OutputPin)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	for {
-		tmp, hum, err := g.ReadDHT(grovepi.D2)
-		if err != nil {
-			panic(err)
-		}
-		fmt.Printf("Temperature: %f - Humidity: %f\n", tmp, hum)
+		g.DigitalWrite(grovepi.D2, 1)
+		time.Sleep(500 * time.Millisecond)
+		g.DigitalWrite(grovepi.D2, 0)
 		time.Sleep(500 * time.Millisecond)
 	}
 }
