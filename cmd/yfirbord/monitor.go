@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/LuCavallin/yfirbord-grovepi/grovepi"
+	"github.com/LuCavallin/yfirbord-grovepi/pkg/grovepi"
 )
 
 func main() {
