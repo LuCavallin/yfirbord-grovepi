@@ -122,7 +122,7 @@ func (grovePi *GrovePi) PinMode(pin byte, mode PinMode) error {
 
 // ReadDHT returns temperature and humidity from DHT sensor
 func (grovePi *GrovePi) ReadDHT(pin byte) (float32, float32, error) {
-	b := []byte{CommandDHTRead, pin, 1, 0}
+	b := []byte{CommandDHTRead, pin, 0, 0}
 	rawdata, err := grovePi.readDHTRawData(b)
 	if err != nil {
 		return 0, 0, err
