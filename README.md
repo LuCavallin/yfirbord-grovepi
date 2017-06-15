@@ -4,8 +4,11 @@ Yfirbord GrovePi, the open source environmental monitor.
 
 ## Usage
 
-Get the tool via
+Make sure you install the dependencies via glide, then build and copy the tool to the RaspberryPi with:
 
 ```sh
-$ go get -u github.com/LuCavallin/yfirbord-grovepi/cmd/grovepi
+$ make build
+$ make copy
 ```
+
+If this doesn't work for you, check the parameters in the Makefile.
