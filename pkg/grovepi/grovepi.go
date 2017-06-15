@@ -8,7 +8,7 @@ import (
 	"github.com/mrmorphic/hwio"
 )
 
-//Pins
+// Pins
 const (
 	A0 = 0
 	A1 = 1
@@ -23,7 +23,7 @@ const (
 	D8 = 8
 )
 
-//Cmd format
+// Commands format
 const (
 	CommandDigitalRead  = 1
 	CommandDigitalWrite = 2
@@ -33,18 +33,23 @@ const (
 	CommandDHTRead      = 40
 )
 
+// PinMode determines the pinmode for the GrovePi
 type PinMode byte
 
+// InputPin is the pinmode for input
+// OutputPin is the pinmode for output
 const (
 	InputPin  PinMode = 0
 	OutputPin         = 1
 )
 
+// GrovePi struct is used for handling the connection with board
 type GrovePi struct {
 	i2cmodule hwio.I2CModule
 	i2cDevice hwio.I2CDevice
 }
 
+// Init initializes the GrovePi
 func Init(address int) (*GrovePi, error) {
 	grovePi := new(GrovePi)
 	m, err := hwio.GetModule("i2c")
@@ -62,11 +67,13 @@ func Init(address int) (*GrovePi, error) {
 	return grovePi, nil
 }
 
+// Close closes the connection with the GrovePi
 func (grovePi *GrovePi) Close() {
 	grovePi.i2cmodule.Disable()
 	hwio.CloseAll()
 }
 
+// AnalogRead reads analogically to the GrovePi
 func (grovePi *GrovePi) AnalogRead(pin byte) (int, error) {
 	b := []byte{CommandAnalogRead, pin, 0, 0}
 	err := grovePi.i2cDevice.Write(1, b)
@@ -84,6 +91,7 @@ func (grovePi *GrovePi) AnalogRead(pin byte) (int, error) {
 	return ((int(val[1]) << 8) | int(val[2])), nil
 }
 
+// DigitalRead reads digitally to the GrovePi
 func (grovePi *GrovePi) DigitalRead(pin byte) (byte, error) {
 	b := []byte{CommandDigitalRead, pin, 0, 0}
 	err := grovePi.i2cDevice.Write(1, b)
@@ -95,6 +103,7 @@ func (grovePi *GrovePi) DigitalRead(pin byte) (byte, error) {
 	return grovePi.i2cDevice.ReadByte(1)
 }
 
+// DigitalWrite writes digitally to the GrovePi
 func (grovePi *GrovePi) DigitalWrite(pin byte, val byte) error {
 	b := []byte{CommandDigitalWrite, pin, val, 0}
 	err := grovePi.i2cDevice.Write(1, b)
@@ -102,6 +111,7 @@ func (grovePi *GrovePi) DigitalWrite(pin byte, val byte) error {
 	return err
 }
 
+// PinMode sets the GrovePi pinmode
 func (grovePi *GrovePi) PinMode(pin byte, mode PinMode) error {
 	b := []byte{CommandPinMode, pin, byte(mode), 0}
 
