@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/LuCavallin/yfirbord-grovepi/pkg/grovepi"
-	"github.com/davecgh/go-spew/spew"
 )
 
 func main() {
@@ -22,15 +21,20 @@ func main() {
 	}
 
 	for {
-		// g.DigitalWrite(grovepi.D4, 1)
-		t, h, err := g.ReadDHT(grovepi.D3)
-		spew.Dump(t, h)
+		// DHT
+		t, h, err := g.ReadDHT(grovepi.D2)
 		if err != nil {
 			log.Fatal(err)
 		}
 		fmt.Printf("T: %f - H: %f \n", t, h)
 		time.Sleep(500 * time.Millisecond)
-		// g.DigitalWrite(grovepi.D4, 0)
-		// time.Sleep(500 * time.Millisecond)
+
+		// Light sensor
+		light, err := g.AnalogRead(grovepi.A2)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("L: %d \n", light)
+		time.Sleep(500 * time.Millisecond)
 	}
 }

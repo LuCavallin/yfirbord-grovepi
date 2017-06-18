@@ -92,15 +92,16 @@ func (grovePi *GrovePi) AnalogRead(pin byte) (int, error) {
 }
 
 // DigitalRead reads digitally to the GrovePi
-func (grovePi *GrovePi) DigitalRead(pin byte) (byte, error) {
+func (grovePi *GrovePi) DigitalRead(pin byte) ([]byte, error) {
 	b := []byte{CommandDigitalRead, pin, 0, 0}
 	err := grovePi.i2cDevice.Write(1, b)
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 	time.Sleep(100 * time.Millisecond)
 
-	return grovePi.i2cDevice.ReadByte(1)
+	// TODO set size via parameter, it's better
+	return grovePi.i2cDevice.Read(1, 1)
 }
 
 // DigitalWrite writes digitally to the GrovePi
@@ -145,6 +146,9 @@ func (grovePi *GrovePi) readDHTRawData(cmd []byte) ([]byte, error) {
 	time.Sleep(600 * time.Millisecond)
 	grovePi.i2cDevice.ReadByte(1)
 	time.Sleep(100 * time.Millisecond)
+
+	// TODO this could use the same DigitalRead as the other sensors,
+	// but need to solution for different time.sleep
 
 	return grovePi.i2cDevice.Read(1, 9)
 }
