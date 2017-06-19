@@ -6,12 +6,13 @@ type Measurement map[string]interface{}
 
 // Sensor contains pin and pinMode for the sensor
 type Sensor struct {
-	name        string
-	description string
-	pin         string
-	command     string
+	Name        string
+	Description string
+	Pin         string
+	Command     string
 }
 
+// Sensors is to easily handle a list of sensors
 type Sensors []Sensor
 
 // InputSensor provides an interface for reading from all sensors
@@ -20,11 +21,11 @@ type InputSensor interface {
 }
 
 // NewSensor returns configuration for a new sensor
-func NewSensor(name string, description string, pin string, command string) Sensor {
+func NewSensor(Name string, Description string, Pin string, Command string) Sensor {
 	return Sensor{
-		name: name,
-		description: description
-		pin:  pin,
-		command: command,
+		Name:        Name,
+		Description: Description,
+		Pin:         Pin,
+		Command:     Command,
 	}
 }
