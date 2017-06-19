@@ -9,7 +9,7 @@ type Sensor struct {
 	name        string
 	description string
 	pin         string
-	mode        string
+	command     string
 }
 
 type Sensors []Sensor
@@ -20,11 +20,11 @@ type InputSensor interface {
 }
 
 // NewSensor returns configuration for a new sensor
-func NewSensor(name string, description string, pin string, mode string) Sensor {
+func NewSensor(name string, description string, pin string, command string) Sensor {
 	return Sensor{
 		name: name,
 		description: description
 		pin:  pin,
-		mode: mode,
+		command: command,
 	}
 }
