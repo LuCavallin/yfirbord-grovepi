@@ -19,5 +19,19 @@
         "analogWrite": 4,
         "pinMode": 5,
         "DHTRead": 40
-    }
+    },
+    "sensors": [
+        {
+            "name": "DHT",
+            "description": "Temperature and humidity sensor",
+            "pin": "D1",
+            "command": "DHTRead"
+        },
+        {
+            "name": "Light",
+            "description": "Light sensor",
+            "pin": "A1",
+            "command": "analogRead"
+        }
+    ]
 }
