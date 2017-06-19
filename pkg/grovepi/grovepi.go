@@ -33,16 +33,6 @@ const (
 	CommandDHTRead      = 40
 )
 
-// PinMode determines the pinmode for the GrovePi
-type PinMode byte
-
-// InputPin is the pinmode for input
-// OutputPin is the pinmode for output
-const (
-	InputPin  PinMode = 0
-	OutputPin         = 1
-)
-
 // GrovePi struct is used for handling the connection with board
 type GrovePi struct {
 	i2cmodule hwio.I2CModule
@@ -50,7 +40,7 @@ type GrovePi struct {
 }
 
 // Init initializes the GrovePi
-func Init(address int) (*GrovePi, error) {
+func Init(config Config) (*GrovePi, error) {
 	grovePi := new(GrovePi)
 	m, err := hwio.GetModule("i2c")
 	if err != nil {
@@ -63,7 +53,7 @@ func Init(address int) (*GrovePi, error) {
 		return nil, err
 	}
 
-	grovePi.i2cDevice = grovePi.i2cmodule.GetDevice(address)
+	grovePi.i2cDevice = grovePi.i2cmodule.GetDevice(config.Address)
 	return grovePi, nil
 }
 
@@ -112,19 +102,19 @@ func (grovePi *GrovePi) DigitalWrite(pin byte, val byte) error {
 	return err
 }
 
-// PinMode sets the GrovePi pinmode
-func (grovePi *GrovePi) PinMode(pin byte, mode PinMode) error {
-	b := []byte{CommandPinMode, pin, byte(mode), 0}
-
-	err := grovePi.i2cDevice.Write(1, b)
-	time.Sleep(100 * time.Millisecond)
-	return err
-}
-
 // ReadDHT returns temperature and humidity from DHT sensor
 func (grovePi *GrovePi) ReadDHT(pin byte) (float32, float32, error) {
-	b := []byte{CommandDHTRead, pin, 0, 0}
-	rawdata, err := grovePi.readDHTRawData(b)
+	cmd := []byte{CommandDHTRead, pin, 0, 0}
+
+	// prepare and read raw data
+	err := grovePi.i2cDevice.Write(1, cmd)
+	if err != nil {
+		return 0, 0, err
+	}
+	time.Sleep(600 * time.Millisecond)
+	grovePi.i2cDevice.ReadByte(1)
+	time.Sleep(100 * time.Millisecond)
+	rawdata, err := grovePi.i2cDevice.Read(1, 9)
 	if err != nil {
 		return 0, 0, err
 	}
@@ -136,19 +126,4 @@ func (grovePi *GrovePi) ReadDHT(pin byte) (float32, float32, error) {
 	h := math.Float32frombits(humidityData)
 
 	return t, h, nil
-}
-
-func (grovePi *GrovePi) readDHTRawData(cmd []byte) ([]byte, error) {
-	err := grovePi.i2cDevice.Write(1, cmd)
-	if err != nil {
-		return nil, err
-	}
-	time.Sleep(600 * time.Millisecond)
-	grovePi.i2cDevice.ReadByte(1)
-	time.Sleep(100 * time.Millisecond)
-
-	// TODO this could use the same DigitalRead as the other sensors,
-	// but need to solution for different time.sleep
-
-	return grovePi.i2cDevice.Read(1, 9)
 }

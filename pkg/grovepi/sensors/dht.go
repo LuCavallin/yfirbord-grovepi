@@ -2,7 +2,6 @@ package sensors
 
 import (
 	"time"
-	"github.com/lucavall.in/yfirbord-grovepi/pkg/sensors"
 )
 
 // DHT is all that is needed for a new DHT sensor
@@ -11,7 +10,7 @@ type DHT struct {
 }
 
 // NewDHT Inits a new DHT sensor
-func NewDHT(sensor sensors.Sensor) DHT {
+func NewDHT(sensor Sensor) DHT {
 	return DHT{
 		sensor: sensor
 	}

@@ -9,16 +9,15 @@ import (
 )
 
 func main() {
-	g, err := grovepi.Init(0x04)
+	// Load GrovePIconfiguration first
+	grovePiConfig := grovepi.Config{Address: 0x04, Pins: nil, Commands: nil}
+	g, err := grovepi.Init(grovePiConfig)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer g.Close()
 
-	err = g.PinMode(grovepi.D4, grovepi.OutputPin)
-	if err != nil {
-		log.Fatal(err)
-	}
+	// TODO Load sensors
 
 	for {
 		// DHT

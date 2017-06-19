@@ -1,2 +1,0 @@
-- want to define some common stuff is sensors.go
-- need to abstract stuff for dht and light, because they return different values and read in different ways
