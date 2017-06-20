@@ -5,8 +5,9 @@ import (
 	"math"
 	"time"
 
-	"github.com/lucavall.in/yfirbord-grovepi/pkg/sensors"
+	"github.com/lucavallin/yfirbord-grovepi/pkg/grovepi/sensors"
 	"github.com/mrmorphic/hwio"
+	"github.com/lucavallin/yfirbord-grovepi/pkg/grovepi"
 )
 
 // Pins
@@ -64,7 +65,7 @@ func (grovePi *GrovePi) Close() {
 	hwio.CloseAll()
 }
 
-// analogRead reads analogically to the GrovePi
+// AnalogRead reads analogically to the GrovePi
 func (grovePi *GrovePi) analogRead(pin byte) (int, error) {
 	b := []byte{CommandAnalogRead, pin, 0, 0}
 	err := grovePi.i2cDevice.Write(1, b)
@@ -129,7 +130,20 @@ func (grovePi *GrovePi) readDHT(pin byte) (float32, float32, error) {
 	return t, h, nil
 }
 
-// ReadFromSensor reads froma  given sensor
-func (grovePi *GrovePi) ReadFromSensor(sensor sensors.InputSensor) (sensors.Measurement, error) {
-	return sensor.Read()
+// ReadFromSensor reads from a given sensor
+func (grovePi *GrovePi) ReadFromSensor(s sensors.Sensor) (sensors.Measurement, error) {
+	var m sensors.Measurement
+
+	switch s.Mode {
+		case "analog":
+			m = grovePi.analogRead(s.Pin)
+			break
+		case "dht":
+			m = grovePi.readDHT(s.Pin)
+			break
+		default
+			panic("Unsupported sensor mode: %s", s.Mode)
+	}
+	
+	return m
 }

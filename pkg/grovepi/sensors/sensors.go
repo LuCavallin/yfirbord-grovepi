@@ -17,5 +17,5 @@ type Sensors []Sensor
 
 // InputSensor provides an interface for reading from all sensors
 type InputSensor interface {
-	Read() (Measurement, error)
+	Measure() (Measurement, error)
 }

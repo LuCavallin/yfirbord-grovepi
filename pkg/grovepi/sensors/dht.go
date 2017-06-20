@@ -1,15 +1,14 @@
-package types
+package sensors
 
 import (
 	"time"
 
 	"github.com/lucavallin/yfirbord-grovepi/pkg/grovepi"
-	"github.com/lucavallin/yfirbord-grovepi/pkg/grovepi/sensors"
 )
 
 // DHT is structure for DHT sensor
 type DHT struct {
-	sensors.Sensor
+	Sensor
 }
 
 func (o DHT) Read(g *grovepi.GrovePi) {
