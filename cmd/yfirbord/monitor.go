@@ -18,6 +18,7 @@ func main() {
 	defer g.Close()
 
 	// TODO Load sensors
+	// getSensorsFromConfig()
 
 	for {
 		// DHT
@@ -35,5 +36,6 @@ func main() {
 		}
 		fmt.Printf("L: %d \n", light)
 		time.Sleep(500 * time.Millisecond)
+
 	}
 }

@@ -19,3 +19,18 @@ type Sensors []Sensor
 type InputSensor interface {
 	Measure() (Measurement, error)
 }
+
+// func sensorSFROMCONFIG() Sensors
+// 	var sensors Sensors
+// 	freach config
+// 		sensors[] = factoryFromType(config.type) // light dht sound
+// 	=
+// 	=
+
+// 	return sensors
+
+// load() {
+//  registerformat("dht", func(Sensor) return DHT{Sensor})
+//  registerformat("light", func(Sensor) return Light{Sensor})
+//  sensorsFromConfig()
+//  }

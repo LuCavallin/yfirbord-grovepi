@@ -5,9 +5,7 @@ import (
 	"math"
 	"time"
 
-	"github.com/lucavallin/yfirbord-grovepi/pkg/grovepi/sensors"
 	"github.com/mrmorphic/hwio"
-	"github.com/lucavallin/yfirbord-grovepi/pkg/grovepi"
 )
 
 // Pins
@@ -128,22 +126,4 @@ func (grovePi *GrovePi) readDHT(pin byte) (float32, float32, error) {
 	h := math.Float32frombits(humidityData)
 
 	return t, h, nil
-}
-
-// ReadFromSensor reads from a given sensor
-func (grovePi *GrovePi) ReadFromSensor(s sensors.Sensor) (sensors.Measurement, error) {
-	var m sensors.Measurement
-
-	switch s.Mode {
-		case "analog":
-			m = grovePi.analogRead(s.Pin)
-			break
-		case "dht":
-			m = grovePi.readDHT(s.Pin)
-			break
-		default
-			panic("Unsupported sensor mode: %s", s.Mode)
-	}
-	
-	return m
 }
