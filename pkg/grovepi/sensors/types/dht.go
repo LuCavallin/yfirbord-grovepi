@@ -1,4 +1,4 @@
-package sensors
+package types
 
 import (
 	"time"
@@ -15,7 +15,7 @@ type DHT struct {
 func (o DHT) Read(g *grovepi.GrovePi) {
 	t, h, err := g.ReadDHT(o.Pin)
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
 	time.Sleep(500 * time.Millisecond)
 

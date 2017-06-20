@@ -1,18 +1,25 @@
-package sensors
+package types
 
 import (
-	"fmt"
-	"log"
 	"time"
 
 	"github.com/lucavallin/yfirbord-grovepi/pkg/grovepi"
+	"github.com/lucavallin/yfirbord-grovepi/pkg/grovepi/sensors"
 )
 
-func (o Sensor) Read() {
+// Light is structure for DHT sensor
+type Light struct {
+	sensors.Sensor
+}
+
+func (o Light) Read(g *grovepi.GrovePi) {
 	light, err := g.AnalogRead(grovepi.A2)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
-	fmt.Printf("L: %d \n", light)
 	time.Sleep(500 * time.Millisecond)
+
+	return Measurement{
+		"light": light,
+	}, nil
 }

@@ -19,13 +19,3 @@ type Sensors []Sensor
 type InputSensor interface {
 	Read() (Measurement, error)
 }
-
-// NewSensor returns configuration for a new sensor
-func NewSensor(Name string, Description string, Pin string, Command string) Sensor {
-	return Sensor{
-		Name:        Name,
-		Description: Description,
-		Pin:         Pin,
-		Command:     Command,
-	}
-}
