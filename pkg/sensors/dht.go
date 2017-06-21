@@ -2,8 +2,6 @@ package sensors
 
 import (
 	"time"
-
-	"github.com/lucavallin/yfirbord-grovepi/pkg/grovepi"
 )
 
 // DHT is structure for DHT sensor
@@ -11,8 +9,8 @@ type DHT struct {
 	Sensor
 }
 
-func (o DHT) Read(g *grovepi.GrovePi) {
-	t, h, err := g.ReadDHT(o.Pin)
+func (o DHT) Read() (Measurement, error) {
+	t, h, err := o.conn.ReadDHT(o.pin)
 	if err != nil {
 		panic(err)
 	}

@@ -64,7 +64,7 @@ func (grovePi *GrovePi) Close() {
 }
 
 // AnalogRead reads analogically to the GrovePi
-func (grovePi *GrovePi) analogRead(pin byte) (int, error) {
+func (grovePi *GrovePi) AnalogRead(pin byte) (int, error) {
 	b := []byte{CommandAnalogRead, pin, 0, 0}
 	err := grovePi.i2cDevice.Write(1, b)
 	if err != nil {
@@ -82,7 +82,7 @@ func (grovePi *GrovePi) analogRead(pin byte) (int, error) {
 }
 
 // DigitalRead reads digitally to the GrovePi
-func (grovePi *GrovePi) digitalRead(pin byte) ([]byte, error) {
+func (grovePi *GrovePi) DigitalRead(pin byte) ([]byte, error) {
 	b := []byte{CommandDigitalRead, pin, 0, 0}
 	err := grovePi.i2cDevice.Write(1, b)
 	if err != nil {
@@ -95,7 +95,7 @@ func (grovePi *GrovePi) digitalRead(pin byte) ([]byte, error) {
 }
 
 // DigitalWrite writes digitally to the GrovePi
-func (grovePi *GrovePi) digitalWrite(pin byte, val byte) error {
+func (grovePi *GrovePi) DigitalWrite(pin byte, val byte) error {
 	b := []byte{CommandDigitalWrite, pin, val, 0}
 	err := grovePi.i2cDevice.Write(1, b)
 	time.Sleep(100 * time.Millisecond)
@@ -103,7 +103,7 @@ func (grovePi *GrovePi) digitalWrite(pin byte, val byte) error {
 }
 
 // ReadDHT returns temperature and humidity from DHT sensor
-func (grovePi *GrovePi) readDHT(pin byte) (float32, float32, error) {
+func (grovePi *GrovePi) ReadDHT(pin byte) (float32, float32, error) {
 	cmd := []byte{CommandDHTRead, pin, 0, 0}
 
 	// prepare and read raw data
