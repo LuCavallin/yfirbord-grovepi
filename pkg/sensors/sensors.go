@@ -1,12 +1,12 @@
 package sensors
 
-// Sensor contains pin and pinMode for the sensor
+// Sensor contains all info on sensor
+// Pin should better be in the reader, but in our case it's totally attached to the sensor itself
 type Sensor struct {
-	Name        string
-	Description string
-	// Pin should better be in the reader, but in our case it's totally attached to the sensor itself
-	Pin  byte
-	Mode string
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Pin         byte   `json:"pin"`
+	Mode        string `json:"mode"`
 }
 
 // Measurement is a map with the sensor name as index and the measurement as vaue

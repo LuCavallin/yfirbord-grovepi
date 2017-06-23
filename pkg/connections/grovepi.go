@@ -47,8 +47,8 @@ type GrovePi struct {
 	i2cDevice hwio.I2CDevice
 }
 
-// Init initializes the GrovePi
-func Init(int address) (*GrovePi, error) {
+// NewGrovePi initializes the GrovePi
+func NewGrovePi(address int) (*GrovePi, error) {
 	grovePi := new(GrovePi)
 	m, err := hwio.GetModule("i2c")
 	if err != nil {

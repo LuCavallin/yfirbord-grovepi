@@ -1,41 +1,44 @@
 package main
 
 import (
-	"fmt"
-	"log"
-	"time"
+	"io/ioutil"
 
-	"github.com/LuCavallin/yfirbord-grovepi/pkg/grovepi"
+	"github.com/davecgh/go-spew/spew"
+	"github.com/lucavallin/yfirbord-grovepi/pkg/connections"
+	"github.com/stretchr/objx"
+)
+
+const (
+	grovePiAddress = 0x04
 )
 
 func main() {
-	// Load GrovePIconfiguration first
-	grovePiConfig := grovepi.Config{Address: 0x04, Pins: nil, Commands: nil}
-	g, err := grovepi.Init(grovePiConfig)
+	// Load sensors
+	configJSON, err := ioutil.ReadFile("./sensors.config.json")
 	if err != nil {
-		log.Fatal(err)
+		panic("Sensors configuration file not found. Aborting.")
+	}
+	config, err := objx.FromJSON(string(configJSON[:]))
+	if err != nil {
+		panic("Sensors configuration invalid format. Aborting.")
+	}
+	spew.Dump(config)
+
+	// Init GrovePi on address grovePiAddress
+	g, err := connections.NewGrovePi(grovePiAddress)
+	if err != nil {
+		panic("Impossibile to communicate with the GrovePi")
 	}
 	defer g.Close()
 
-	// TODO Load sensors
-	// getSensorsFromConfig()
+	// Create readers
+	// readersConfig := config.Get("input")
+	// for conf := objx.ArrayEach() {
+	// 	sensor := sensors.NewSensor(conf["name"], conf["description"], conf["pin"], conf["mode"])
+	// }
 
-	for {
-		// DHT
-		t, h, err := g.ReadDHT(grovepi.D2)
-		if err != nil {
-			log.Fatal(err)
-		}
-		fmt.Printf("T: %f - H: %f \n", t, h)
-		time.Sleep(500 * time.Millisecond)
+	// Create writers
+	// for conf := range config["output"] {
 
-		// Light sensor
-		light, err := g.AnalogRead(grovepi.A2)
-		if err != nil {
-			log.Fatal(err)
-		}
-		fmt.Printf("L: %d \n", light)
-		time.Sleep(500 * time.Millisecond)
-
-	}
+	// }
 }

@@ -20,3 +20,9 @@ type DigitalOutput interface {
 type DHTInput interface {
 	DHTRead(pin byte) (float32, float32, error)
 }
+
+// Pin is to handle board's pins
+type Pin struct {
+	id   byte
+	busy bool
+}
