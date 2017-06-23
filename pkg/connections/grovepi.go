@@ -1,4 +1,4 @@
-package grovepi
+package connections
 
 import (
 	"encoding/binary"
@@ -10,10 +10,17 @@ import (
 
 // Pins
 const (
+	// pins = map[string][]int {
+	// 	"analog": [
+	// 		0, 1, 2
+	// 	],
+	// 	"digital": [
+	// 		2, 3, 4, 5, 6, 7, 8
+	// 	]
+	// }
 	A0 = 0
 	A1 = 1
 	A2 = 2
-
 	D2 = 2
 	D3 = 3
 	D4 = 4
@@ -29,9 +36,10 @@ const (
 	CommandDigitalWrite = 2
 	CommandAnalogRead   = 3
 	CommandAnalogWrite  = 4
-	CommandPinMode      = 5
 	CommandDHTRead      = 40
 )
+
+// put check to see if available pin is in range
 
 // GrovePi struct is used for handling the connection with board
 type GrovePi struct {
@@ -40,7 +48,7 @@ type GrovePi struct {
 }
 
 // Init initializes the GrovePi
-func Init(config Config) (*GrovePi, error) {
+func Init(int address) (*GrovePi, error) {
 	grovePi := new(GrovePi)
 	m, err := hwio.GetModule("i2c")
 	if err != nil {
@@ -53,7 +61,7 @@ func Init(config Config) (*GrovePi, error) {
 		return nil, err
 	}
 
-	grovePi.i2cDevice = grovePi.i2cmodule.GetDevice(config.Address)
+	grovePi.i2cDevice = grovePi.i2cmodule.GetDevice(address)
 	return grovePi, nil
 }
 
@@ -102,8 +110,8 @@ func (grovePi *GrovePi) DigitalWrite(pin byte, val byte) error {
 	return err
 }
 
-// ReadDHT returns temperature and humidity from DHT sensor
-func (grovePi *GrovePi) ReadDHT(pin byte) (float32, float32, error) {
+// DHTRead returns temperature and humidity from DHT sensor
+func (grovePi *GrovePi) DHTRead(pin byte) (float32, float32, error) {
 	cmd := []byte{CommandDHTRead, pin, 0, 0}
 
 	// prepare and read raw data

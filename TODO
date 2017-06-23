@@ -1,0 +1,4 @@
+Write tests!
+- make impossible for two sensors to connect to the same pin
+
+- pin doesn't need to know if analog or digital, as reading type depends on the sensor

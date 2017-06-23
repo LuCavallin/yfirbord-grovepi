@@ -1,6 +1,0 @@
-hash: f9177ad0eecfd980f34caa146c4c2a654f3cae7c7337fea8f442c2ed7ad4c015
-updated: 2017-06-05T13:05:22.283319416+02:00
-imports:
-- name: github.com/mrmorphic/hwio
-  version: 31c3eee75cb2f64e31e0bd6bc20dfb4bfe0f5e80
-testImports: []
