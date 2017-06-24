@@ -1,6 +1,6 @@
 GOOS=linux
 GOARCH=arm
-FILES=yfirbord
+FILES=yfirbord sensors.config.json
 
 build:
 	env GOOS=$(GOOS) GOARCH=$(GOARCH) go build ./cmd/yfirbord

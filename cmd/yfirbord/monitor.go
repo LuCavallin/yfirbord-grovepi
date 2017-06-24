@@ -1,41 +1,51 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"io/ioutil"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/lucavallin/yfirbord-grovepi/pkg/connections"
-	"github.com/stretchr/objx"
+	"github.com/lucavallin/yfirbord-grovepi/pkg/readers"
+	"github.com/lucavallin/yfirbord-grovepi/pkg/sensors"
 )
 
 const (
 	grovePiAddress = 0x04
 )
 
+var sensorConfig []sensors.Sensor
+
 func main() {
 	// Load sensors
 	configJSON, err := ioutil.ReadFile("./sensors.config.json")
 	if err != nil {
-		panic("Sensors configuration file not found. Aborting.")
+		fmt.Printf("Sensors configuration file not found.\nERROR: %s \n", err)
 	}
-	config, err := objx.FromJSON(string(configJSON[:]))
+	err = json.Unmarshal(configJSON, &sensorConfig)
 	if err != nil {
-		panic("Sensors configuration invalid format. Aborting.")
+		fmt.Printf("Sensors configuration is invalid.\nERROR: %s \n", err)
 	}
-	spew.Dump(config)
 
-	// Init GrovePi on address grovePiAddress
+	// Init GrovePi on address
 	g, err := connections.NewGrovePi(grovePiAddress)
 	if err != nil {
-		panic("Impossibile to communicate with the GrovePi")
+		panic(err)
 	}
 	defer g.Close()
 
 	// Create readers
-	// readersConfig := config.Get("input")
-	// for conf := objx.ArrayEach() {
-	// 	sensor := sensors.NewSensor(conf["name"], conf["description"], conf["pin"], conf["mode"])
-	// }
+	var readersList []readers.Reader
+	for _, sensor := range sensorConfig {
+		reader, err := readers.NewReader(sensor, g)
+		if err != nil {
+			fmt.Printf("Couldn't establish reading connection with device.\nERROR: %s \n", err)
+		}
+		readersList = append(readersList, reader)
+	}
+
+	spew.Dump(readersList)
 
 	// Create writers
 	// for conf := range config["output"] {
