@@ -1,0 +1,10 @@
+{
+    {
+        name: "dht",
+        description: "Temperature and humidity sensor"
+        type: "dht",
+        pin: "D1",
+        mode: 0,
+        command: 40
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "pins": {
+        "A0" : 0,
+        "A1" : 1,
+        "A2" : 2,
+        "D2" : 2,
+        "D3" : 3,
+        "D4" : 4,
+        "D5" : 5,
+        "D6" : 6,
+        "D7" : 7,
+        "D8" : 8
+    },
+    "modes": [
+        {}
+    ],
+    "commands": {
+        "digitalRead": 1,
+        "digitalWrite": 2,
+        "analogRead": 3,
+        "analogWrite": 4,
+        "pinMode": 5,
+        "DHTRead": 40
+    }
+}

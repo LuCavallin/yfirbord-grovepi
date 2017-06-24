@@ -1,0 +1,4 @@
+GOOS=linux
+GOARCH=arm
+
+# scp yfirbord yfirbord:yfirbord@yfirbord-grovepi.local:/home/yfirbord/

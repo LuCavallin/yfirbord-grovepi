@@ -1,0 +1,3 @@
+Write tests!
+- pin should be allocated by board and check if not used!
+-- implement idea of reader askinf for active pin to board

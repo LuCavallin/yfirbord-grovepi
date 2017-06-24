@@ -1,0 +1,17 @@
+{
+    "input": [
+        {
+            "name": "DHT",
+            "description": "Temperature and humidity sensor",
+            "pin": "D1",
+            "mode": "dht"
+        },
+        {
+            "name": "Light",
+            "description": "Light sensor",
+            "pin": "A1",
+            "mode": "light"
+        }
+    ],
+    "output": [{}]
+}
