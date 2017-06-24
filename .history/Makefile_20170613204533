@@ -1,4 +1,0 @@
-GOOS=linux
-GOARCH=arm
-
-build: env GOOS=$(GOOS) GOARCH=$(GOARCH) go build cmd/yfirbord

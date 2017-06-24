@@ -1,5 +1,0 @@
-GOOS=linux
-GOARCH=arm
-
-build: GOOS GOARCH
-	env GOOS=$(GOOS) GOARCH=$(GOARCH) go build $(GOPATH)/github.com/LuCavallin/yfirbord-grovepi/cmd/yfirbord

@@ -1,8 +1,0 @@
-{
-    "CommandDigitalRead": 1,
-    "CommandDigitalWrite": 2,
-    "CommandAnalogRead": 3,
-    "CommandAnalogWrite": 4,
-    "CommandPinMode": 5,
-    "CommandDHTRead": 40
-}

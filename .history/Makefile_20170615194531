@@ -1,9 +1,0 @@
-GOOS=linux
-GOARCH=arm
-FILES = yfirbord
-
-build:
-	env GOOS=$(GOOS) GOARCH=$(GOARCH) go build github.com/LuCavallin/yfirbord-grovepi/cmd/yfirbord
-
-copy:
-     scp $(FILES) scp yfirbord yfirbord@yfirbord-grovepi.local:/home/yfirbord/
