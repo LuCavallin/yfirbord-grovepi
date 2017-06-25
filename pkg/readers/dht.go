@@ -1,7 +1,7 @@
 package readers
 
 import (
-	"time"
+	"fmt"
 
 	"github.com/lucavallin/yfirbord-grovepi/pkg/connections"
 	"github.com/lucavallin/yfirbord-grovepi/pkg/sensors"
@@ -13,15 +13,14 @@ type DHT struct {
 	conn connections.DHTInput
 }
 
-func (o DHT) Read() (sensors.Measurement, error) {
+func (o DHT) Read(c chan<- sensors.Measurement) error {
 	t, h, err := o.conn.DHTRead(o.Pin)
 	if err != nil {
-		panic(err)
+		fmt.Printf("Couldn't read from DHT.\nERROR: %s \n", err)
 	}
-	time.Sleep(500 * time.Millisecond)
 
-	return sensors.Measurement{
+	c <- sensors.Measurement{
 		"temperature": t,
 		"humidity":    h,
-	}, nil
+	}
 }

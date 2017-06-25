@@ -7,7 +7,7 @@ import (
 
 // Reader interface for input sensors
 type Reader interface {
-	Read() (sensors.Measurement, error)
+	Read(chan<- sensors.Measurement) error
 }
 
 // NewReader Creates a new reader given sensor and connection

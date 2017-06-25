@@ -1,7 +1,7 @@
 package readers
 
 import (
-	"time"
+	"fmt"
 
 	"github.com/lucavallin/yfirbord-grovepi/pkg/connections"
 	"github.com/lucavallin/yfirbord-grovepi/pkg/sensors"
@@ -13,14 +13,13 @@ type Light struct {
 	conn connections.AnalogInput
 }
 
-func (o Light) Read() (sensors.Measurement, error) {
+func (o Light) Read(c chan<- sensors.Measurement) error {
 	light, err := o.conn.AnalogRead(o.Pin)
 	if err != nil {
-		panic(err)
+		fmt.Printf("Couldn't read from Light.\nERROR: %s \n", err)
 	}
-	time.Sleep(500 * time.Millisecond)
 
-	return sensors.Measurement{
+	c <- sensors.Measurement{
 		"light": light,
-	}, nil
+	}
 }
