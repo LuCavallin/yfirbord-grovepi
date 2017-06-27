@@ -1,33 +1,9 @@
 package connections
 
 import (
-	"encoding/binary"
-	"math"
 	"time"
 
 	"github.com/mrmorphic/hwio"
-)
-
-// Pins
-const (
-	// pins = map[string][]int {
-	// 	"analog": [
-	// 		0, 1, 2
-	// 	],
-	// 	"digital": [
-	// 		2, 3, 4, 5, 6, 7, 8
-	// 	]
-	// }
-	A0 = 0
-	A1 = 1
-	A2 = 2
-	D2 = 2
-	D3 = 3
-	D4 = 4
-	D5 = 5
-	D6 = 6
-	D7 = 7
-	D8 = 8
 )
 
 // Commands format
@@ -49,89 +25,108 @@ type GrovePi struct {
 
 // NewGrovePi initializes the GrovePi
 func NewGrovePi(address int) (*GrovePi, error) {
-	grovePi := new(GrovePi)
+	g := new(GrovePi)
 	m, err := hwio.GetModule("i2c")
 	if err != nil {
 		return nil, err
 	}
 
-	grovePi.i2cmodule = m.(hwio.I2CModule)
-	err = grovePi.i2cmodule.Enable()
+	g.i2cmodule = m.(hwio.I2CModule)
+	err = g.i2cmodule.Enable()
 	if err != nil {
 		return nil, err
 	}
 
-	grovePi.i2cDevice = grovePi.i2cmodule.GetDevice(address)
-	return grovePi, nil
+	g.i2cDevice = g.i2cmodule.GetDevice(address)
+	return g, nil
 }
 
 // Close closes the connection with the GrovePi
-func (grovePi *GrovePi) Close() {
-	grovePi.i2cmodule.Disable()
+func (g *GrovePi) Close() {
+	g.i2cmodule.Disable()
 	hwio.CloseAll()
 }
 
-// AnalogRead reads analogically to the GrovePi
-func (grovePi *GrovePi) AnalogRead(pin byte) (int, error) {
-	b := []byte{CommandAnalogRead, pin, 0, 0}
-	err := grovePi.i2cDevice.Write(1, b)
-	if err != nil {
-		return 0, err
-	}
-	time.Sleep(100 * time.Millisecond)
+// Read from [pin] in [mode] bytes [size]
+func (g *GrovePi) Read(pin byte, mode string, size int) ([]byte, error) {
+	var raw []byte
+	var err error
 
-	grovePi.i2cDevice.ReadByte(1)
-	val, err := grovePi.i2cDevice.Read(1, 4)
-	if err != nil {
-		return 0, err
+	switch mode {
+	case "digital":
+		raw, err = g.digitalRead(pin, size)
+		break
+	case "analog":
+		raw, err = g.analogRead(pin, size)
+		break
+	case "dht":
+		raw, err = g.dhtRead(pin, size)
+		break
+	default:
+		break
 	}
 
-	return ((int(val[1]) << 8) | int(val[2])), nil
+	return raw, err
 }
 
-// DigitalRead reads digitally to the GrovePi
-func (grovePi *GrovePi) DigitalRead(pin byte) ([]byte, error) {
+// analogRead reads analogically to the GrovePi
+func (g *GrovePi) analogRead(pin byte, size int) ([]byte, error) {
+	b := []byte{CommandAnalogRead, pin, 0, 0}
+	err := g.i2cDevice.Write(1, b)
+	if err != nil {
+		return nil, err
+	}
+
+	time.Sleep(100 * time.Millisecond)
+
+	g.i2cDevice.ReadByte(1)
+
+	raw, err := g.i2cDevice.Read(1, size)
+	if err != nil {
+		return nil, err
+	}
+
+	return raw, err
+}
+
+// digitalRead reads digitally to the GrovePi
+func (g *GrovePi) digitalRead(pin byte, size int) ([]byte, error) {
 	b := []byte{CommandDigitalRead, pin, 0, 0}
-	err := grovePi.i2cDevice.Write(1, b)
+	err := g.i2cDevice.Write(1, b)
 	if err != nil {
 		return nil, err
 	}
 	time.Sleep(100 * time.Millisecond)
 
 	// TODO set size via parameter, it's better
-	return grovePi.i2cDevice.Read(1, 1)
+	return g.i2cDevice.Read(1, size)
 }
 
-// DigitalWrite writes digitally to the GrovePi
-func (grovePi *GrovePi) DigitalWrite(pin byte, val byte) error {
-	b := []byte{CommandDigitalWrite, pin, val, 0}
-	err := grovePi.i2cDevice.Write(1, b)
-	time.Sleep(100 * time.Millisecond)
-	return err
-}
-
-// DHTRead returns temperature and humidity from DHT sensor
-func (grovePi *GrovePi) DHTRead(pin byte) (float32, float32, error) {
+// dhtRead returns temperature and humidity from DHT sensor
+func (g *GrovePi) dhtRead(pin byte, size int) ([]byte, error) {
 	cmd := []byte{CommandDHTRead, pin, 0, 0}
 
 	// prepare and read raw data
-	err := grovePi.i2cDevice.Write(1, cmd)
+	err := g.i2cDevice.Write(1, cmd)
 	if err != nil {
-		return 0, 0, err
+		return nil, err
 	}
 	time.Sleep(600 * time.Millisecond)
-	grovePi.i2cDevice.ReadByte(1)
+	g.i2cDevice.ReadByte(1)
 	time.Sleep(100 * time.Millisecond)
-	rawdata, err := grovePi.i2cDevice.Read(1, 9)
+
+	rawdata, err := g.i2cDevice.Read(1, size)
 	if err != nil {
-		return 0, 0, err
+		return nil, err
 	}
 
-	temperatureData := binary.LittleEndian.Uint32(rawdata[1:5])
-	t := math.Float32frombits(temperatureData)
+	return rawdata, nil
+}
 
-	humidityData := binary.LittleEndian.Uint32(rawdata[5:9])
-	h := math.Float32frombits(humidityData)
-
-	return t, h, nil
+// digitalWrite writes digitally to the GrovePi
+func (g *GrovePi) digitalWrite(pin byte, val byte) error {
+	b := []byte{CommandDigitalWrite, pin, val, 0}
+	err := g.i2cDevice.Write(1, b)
+	time.Sleep(100 * time.Millisecond)
+	return err
 }

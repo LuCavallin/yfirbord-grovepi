@@ -2,28 +2,42 @@ package readers
 
 import (
 	"github.com/lucavallin/yfirbord-grovepi/pkg/connections"
+	"github.com/lucavallin/yfirbord-grovepi/pkg/readers/parsers"
 	"github.com/lucavallin/yfirbord-grovepi/pkg/sensors"
 )
 
-// Reader interface for input sensors
-type Reader interface {
-	Read(chan<- sensors.Measurement) error
+// Reader knows how to read from the connection and parse the content
+type Reader struct {
+	parsers map[string]parsers.Parser
+	conn    connections.ReadConnection
 }
 
-// NewReader Creates a new reader given sensor and connection
-func NewReader(sensor sensors.Sensor, conn *connections.GrovePi) (Reader, error) {
-	var reader Reader
+//NewReader creates a new reader
+func NewReader(conn connections.ReadConnection) *Reader {
+	return &Reader{
+		parsers: getParsers(),
+		conn:    conn,
+	}
+}
 
-	switch sensor.Mode {
-	case "dht":
-		reader = DHT{sensor, conn}
-		break
-	case "light":
-		reader = Light{sensor, conn}
-		break
-	default:
-		return nil, nil
+// Read, reads and parsers from sensor
+// @TODO not sure about error handling here
+func (r *Reader) Read(s sensors.Sensor, c chan<- parsers.Measurement) {
+	raw, err := r.conn.Read(s.Pin, s.Mode, s.Size)
+	si := r.parsers[s.Type].ToSI(raw)
+
+	if err != nil {
+		// log
+		panic(err)
 	}
 
-	return reader, nil
+	c <- si
+}
+
+// TODO Factory logic
+func getParsers() map[string]parsers.Parser {
+	return map[string]parsers.Parser{
+		"dht":   new(parsers.DHT),
+		"light": new(parsers.Light),
+	}
 }

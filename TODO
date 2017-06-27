@@ -3,3 +3,5 @@ Write tests!
 - implement reader factory
 - error handling with channels?
 - read every 5 minutes
+- maybe we need to keep dhtread, as it is a whole different command for grovepi
+- check conf for go for vscode
