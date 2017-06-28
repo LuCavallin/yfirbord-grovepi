@@ -5,7 +5,7 @@
             "description": "Temperature and humidity sensor",
             "pin": 1, // this should be out
             "mode": "dht", // this should be "multiple"
-            "type": "dht",
+            "parser": "dht",
             "size": 8 // Size in byte of output
         },
         {
@@ -13,7 +13,7 @@
             "description": "Light sensor",
             "pin": 1,
             "mode": "analog",
-            "type": "light",
+            "parser": "light",
             "size": 4
         }
     ],

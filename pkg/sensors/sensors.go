@@ -5,8 +5,8 @@ package sensors
 type Sensor struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
-	Pin         byte   `json:"pin"`
+	Pin         byte   `json:"pin"` // This shouldn't be here, but it's incredibly useful to have
 	Mode        string `json:"mode"`
-	Type        string `json:"type"`
+	Parser      string `json:"parser"`
 	Size        int    `json:"size"`
 }
