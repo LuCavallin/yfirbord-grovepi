@@ -3,10 +3,10 @@
         {
             "name": "DHT",
             "description": "Temperature and humidity sensor",
-            "pin": 1, // this should be out
-            "mode": "dht", // this should be "multiple"
+            "pin": 2,
+            "mode": "dht",
             "parser": "dht",
-            "size": 8 // Size in byte of output
+            "size": 9
         },
         {
             "name": "Light",

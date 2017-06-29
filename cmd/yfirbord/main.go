@@ -16,7 +16,6 @@ import (
 
 const (
 	grovePiAddress = 0x04
-	secondsWait    = 360
 )
 
 // config should have pinNumber -> sensors, in a way that sensors are mapped to pins
@@ -29,7 +28,9 @@ func main() {
 		fmt.Printf("Sensors configuration file not found.\nERROR: %s \n", err)
 		os.Exit(1)
 	}
-	if json.Unmarshal(config, &loadedSensors); err != nil {
+
+	err = json.Unmarshal(config, &loadedSensors)
+	if err != nil {
 		fmt.Printf("Sensors configuration is invalid.\nERROR: %s \n", err)
 		os.Exit(1)
 	}
@@ -46,33 +47,36 @@ func main() {
 	reader := io.NewReader(parsers.GetParsers(), g)
 
 	// Create channel
-	c := make(chan parsers.Measurement)
+	ch := make(chan parsers.Measurement)
 
 	// Start reading!
 	for _, sensor := range loadedSensors["input"] {
-		// Go read the sensor every 5 minutes
-		go func(r *io.Reader, s sensors.Sensor, c chan<- parsers.Measurement) {
+		go func(reader *io.Reader, sensor sensors.Sensor, c chan<- parsers.Measurement) {
 			for {
-				measurement, err := r.Read(s)
+				measurement, err := reader.Read(sensor)
+
 				if err != nil {
 					log.Panicln(err)
 				} else {
 					c <- measurement
 				}
-				// Read every secondsWait minutes
-				time.Sleep(time.Second * secondsWait)
+
+				time.Sleep(time.Second)
 			}
-		}(reader, sensor, c)
+		}(reader, sensor, ch)
 	}
 
 	// Create API manager
-	// Print out
-	go func(c chan parsers.Measurement) {
-		measurement := <-c
-		for item, measure := range measurement {
-			fmt.Printf("%s: %v\n", item, measure)
+	go func(c <-chan parsers.Measurement) {
+		for {
+			measurement := <-c
+			for item, measure := range measurement {
+				fmt.Printf("%s: %v\n", item, measure)
+			}
 		}
-	}(c)
+	}(ch)
 
+	// How do I quit when the api is done?
 	time.Sleep(time.Minute)
+	close(ch)
 }

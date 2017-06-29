@@ -19,7 +19,7 @@ const (
 
 // GrovePi struct is used for handling the connection with board
 type GrovePi struct {
-	i2cmodule hwio.I2CModule
+	i2cModule hwio.I2CModule
 	i2cDevice hwio.I2CDevice
 }
 
@@ -31,19 +31,19 @@ func NewGrovePi(address int) (*GrovePi, error) {
 		return nil, err
 	}
 
-	g.i2cmodule = m.(hwio.I2CModule)
-	err = g.i2cmodule.Enable()
+	g.i2cModule = m.(hwio.I2CModule)
+	err = g.i2cModule.Enable()
 	if err != nil {
 		return nil, err
 	}
 
-	g.i2cDevice = g.i2cmodule.GetDevice(address)
+	g.i2cDevice = g.i2cModule.GetDevice(address)
 	return g, nil
 }
 
 // Close closes the connection with the GrovePi
 func (g *GrovePi) Close() {
-	g.i2cmodule.Disable()
+	g.i2cModule.Disable()
 	hwio.CloseAll()
 }
 
@@ -52,6 +52,7 @@ func (g *GrovePi) Read(pin byte, mode string, size int) ([]byte, error) {
 	var raw []byte
 	var err error
 
+	// This is rather shitty
 	switch mode {
 	case "digital":
 		raw, err = g.digitalRead(pin, size)
