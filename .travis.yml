@@ -6,5 +6,8 @@ before_script:
   - go vet ./...
 install:
   - go get -u github.com/mrmorphic/hwio
+  - go get -u github.com/lucavallin/yfirbord-grovepi/pkg/connections
+  - go get -u github.com/lucavallin/yfirbord-grovepi/pkg/io
+  - go get -u github.com/lucavallin/yfirbord-grovepi/pkg/sensors
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash) -t c46ec9ce-aeaa-469b-8990-b212dadb5048
