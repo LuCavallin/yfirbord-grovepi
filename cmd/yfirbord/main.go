@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"sync"
 	"time"
 
 	"github.com/lucavallin/yfirbord-grovepi/pkg/connections"
@@ -22,6 +23,8 @@ const (
 var loadedSensors map[string][]sensors.Sensor
 
 func main() {
+	var mutex = &sync.Mutex{}
+
 	// Load sensors
 	config, err := ioutil.ReadFile("./sensors.json")
 	if err != nil {
@@ -53,7 +56,9 @@ func main() {
 	for _, sensor := range loadedSensors["input"] {
 		go func(reader *io.Reader, sensor sensors.Sensor, c chan<- parsers.Measurement) {
 			for {
+				mutex.Lock()
 				measurement, err := reader.Read(sensor)
+				mutex.Unlock()
 
 				if err != nil {
 					log.Panicln(err)
