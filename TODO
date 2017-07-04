@@ -1,5 +1,0 @@
-Write tests!
-- implement reader factory
-- maybe we need to keep dhtread, as it is a whole different command for grovepi
-- check conf for go for vscode
-- check what to run at travisci
