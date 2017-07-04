@@ -9,6 +9,7 @@ before_install:
   - go get -u github.com/haya14busa/goverage
 
 script:
+  - go vet ./..
   - goverage -v -coverprofile=coverage.txt ./...
 
 after_success:

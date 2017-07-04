@@ -1,7 +1,7 @@
 package io
 
 import (
-	"github.com/lucavallin/yfirbord-grovepi/pkg/connections"
+	"github.com/LuCavallin/yfirbord-grovepi/pkg/connections"
 )
 
 // Writer knows how to write from to the connection
