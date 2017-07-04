@@ -1,9 +1,10 @@
 test:
   pre:
+    - go get -u github.com/haya14busa/goverage
     - go get -t -v ./...
-    - go vet ./..
   override:
     # './...' is a relative pattern which means all subdirectories  
-    - go test ./cmd/sensors -race -coverprofile=coverage.txt -covermode=atomic
+    - go vet ./...
+    - goverage -v -coverprofile=coverage.txt ./...
   post:
     - bash <(curl -s https://codecov.io/bash)
