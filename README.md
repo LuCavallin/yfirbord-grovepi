@@ -18,3 +18,7 @@ $ make build copy
 ```
 
 If this doesn't work for you, check the parameters in the Makefile.
+
+## Crontab
+
+To make it work properly configure add a crontab entry to run yfirbord every amount-of-time-you-prefer.

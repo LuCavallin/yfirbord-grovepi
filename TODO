@@ -1,8 +1,5 @@
 Write tests!
-- pin doesn't need to know if analog or digital, as reading type depends on the sensors
 - implement reader factory
-- error handling with channels
 - maybe we need to keep dhtread, as it is a whole different command for grovepi
 - check conf for go for vscode
-- catch size error
 - check what to run at travisci

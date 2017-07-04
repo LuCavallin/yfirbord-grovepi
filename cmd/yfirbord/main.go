@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"time"
+	"sync"
 
 	"github.com/LuCavallin/yfirbord-grovepi/pkg/connections"
 	"github.com/LuCavallin/yfirbord-grovepi/pkg/io"
@@ -22,6 +22,10 @@ const (
 var loadedSensors map[string][]sensors.Sensor
 
 func main() {
+	// Init concurrency stuff
+	m := &sync.Mutex{}
+	var wg sync.WaitGroup
+
 	// Load sensors
 	config, err := ioutil.ReadFile("./sensors.json")
 	if err != nil {
@@ -50,18 +54,18 @@ func main() {
 	ch := make(chan parsers.Measurement)
 
 	// Start reading!
+	wg.Add(len(loadedSensors["input"]))
 	for _, sensor := range loadedSensors["input"] {
 		go func(reader *io.Reader, sensor sensors.Sensor, c chan<- parsers.Measurement) {
-			for {
-				measurement, err := reader.Read(sensor)
+			defer wg.Done()
+			m.Lock()
+			measurement, err := reader.Read(sensor)
+			m.Unlock()
 
-				if err != nil {
-					log.Panicln(err)
-				} else {
-					c <- measurement
-				}
-
-				time.Sleep(time.Second)
+			if err != nil {
+				log.Panicln(err)
+			} else {
+				c <- measurement
 			}
 		}(reader, sensor, ch)
 	}
@@ -76,7 +80,7 @@ func main() {
 		}
 	}(ch)
 
-	// How do I quit when the api is done?
-	time.Sleep(time.Minute)
+	// Wait then quit
+	wg.Wait()
 	close(ch)
 }
