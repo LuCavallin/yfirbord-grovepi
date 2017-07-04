@@ -1,7 +1,7 @@
 # Yfirbord GrovePi
 
 [![Build Status](https://travis-ci.org/LuCavallin/yfirbord-grovepi.svg?branch=master)](https://travis-ci.org/LuCavallin/yfirbord-grovepi)
-[![Code Climate](https://codeclimate.com/github/codeclimate/codeclimate/badges/gpa.svg)](https://codeclimate.com/github/codeclimate/codeclimate)utm_content=LuCavallin/yfirbord-grovepi&utm_campaign=badger)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/719fb2f2ff4d46c7841611b970fa2c15)](https://www.codacy.com/app/lucavallin/yfirbord-grovepi?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=LuCavallin/yfirbord-grovepi&amp;utm_campaign=Badge_Grade)
 [![codecov](https://codecov.io/gh/LuCavallin/yfirbord-grovepi/branch/master/graph/badge.svg)](https://codecov.io/gh/LuCavallin/yfirbord-grovepi)
 
 
