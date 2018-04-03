@@ -1,12 +1,11 @@
-# Yfirbord GrovePi
+# Hytta Pi
 
-[![Build Status](https://travis-ci.org/LuCavallin/yfirbord-grovepi.svg?branch=master)](https://travis-ci.org/LuCavallin/yfirbord-grovepi)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/719fb2f2ff4d46c7841611b970fa2c15)](https://www.codacy.com/app/lucavallin/yfirbord-grovepi?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=LuCavallin/yfirbord-grovepi&amp;utm_campaign=Badge_Grade)
-[![codecov](https://codecov.io/gh/LuCavallin/yfirbord-grovepi/branch/master/graph/badge.svg)](https://codecov.io/gh/LuCavallin/yfirbord-grovepi)
-
+[![Build Status](https://travis-ci.org/lucavallin/hytta-pi.svg?branch=master)](https://travis-ci.org/lucavallin/hytta-pi)
+[![codecov](https://codecov.io/gh/lucavallin/hytta-pi/branch/master/graph/badge.svg)](https://codecov.io/gh/lucavallin/hytta-pi)
 
 
-Yfirbord GrovePi, the open source environmental monitor.
+
+Hytta Pi, a cloud UI for your IoT devices.
 
 
 ## Usage
@@ -21,4 +20,4 @@ If this doesn't work for you, check the parameters in the Makefile.
 
 ## Crontab
 
-To make it work properly configure add a crontab entry to run yfirbord every amount-of-time-you-prefer.
+To make it work properly configure add a crontab entry to run hytta every amount-of-time-you-prefer.

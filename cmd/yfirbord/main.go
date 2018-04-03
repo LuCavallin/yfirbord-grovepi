@@ -8,10 +8,10 @@ import (
 	"os"
 	"sync"
 
-	"github.com/LuCavallin/yfirbord-grovepi/pkg/connections"
-	"github.com/LuCavallin/yfirbord-grovepi/pkg/io"
-	"github.com/LuCavallin/yfirbord-grovepi/pkg/sensors"
-	"github.com/LuCavallin/yfirbord-grovepi/pkg/sensors/parsers"
+	"github.com/lucavallin/hytta-grovepi/pkg/connections"
+	"github.com/lucavallin/hytta-grovepi/pkg/io"
+	"github.com/lucavallin/hytta-grovepi/pkg/sensors"
+	"github.com/lucavallin/hytta-grovepi/pkg/sensors/parsers"
 )
 
 const (

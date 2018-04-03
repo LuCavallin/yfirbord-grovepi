@@ -1,9 +1,9 @@
 package io
 
 import (
-	"github.com/LuCavallin/yfirbord-grovepi/pkg/connections"
-	"github.com/LuCavallin/yfirbord-grovepi/pkg/sensors"
-	"github.com/LuCavallin/yfirbord-grovepi/pkg/sensors/parsers"
+	"github.com/lucavallin/hytta-grovepi/pkg/connections"
+	"github.com/lucavallin/hytta-grovepi/pkg/sensors"
+	"github.com/lucavallin/hytta-grovepi/pkg/sensors/parsers"
 )
 
 // Reader knows how to read from the connection and parse the content
