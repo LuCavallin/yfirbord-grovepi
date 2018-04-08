@@ -6,7 +6,7 @@
 
 
 
-Hytta Pi, a cloud UI for your IoT devices.
+A cloud UI for your IoT prototypes.
 
 
 ## Usage
