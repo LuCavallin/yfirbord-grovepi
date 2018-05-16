@@ -6,4 +6,4 @@
 
 
 
-A cloud UI for your IoT prototypes.
+IoT platform for prototypes.
