@@ -1,4 +1,0 @@
-package: .
-import:
-- package: github.com/mrmorphic/hwio
-  version: ^0.2.0
