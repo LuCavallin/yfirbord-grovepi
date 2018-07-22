@@ -7,12 +7,12 @@ cache:
     - "~/.platformio"
     - ".pioenvs"
 
+install:
+    - pip install -U platformio
+    - platformio update
+
 jobs:
   include:
-  - stage: setup
-    script:
-      pip install -U platformio
-      platformio update
   - stage: build
     script: platformio run
   - stage: release
