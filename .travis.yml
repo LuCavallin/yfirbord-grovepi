@@ -21,5 +21,5 @@ jobs:
       provider: releases
       api_key:
         secure: hDWCX/Hv/h1ql7TJQwb+Wzv/fGdIkxNhlRf36XfsN/Bz68HvF8W7zZ6hha/ZbAeZ/2xy+iJ5eBU3e4fya4aDaMdUlIA7vu+zZ872tjlW8qKrVfij4fOcLdgjz/wo6P9qNBfpkXokBimGyMc257TRE7gwa7NQJ6txxSq6Ifuy+fDxOtPNKdkp5VCkOtlJ9Z8QS591NYYZU1El1OgmwvJgMPXl73j8QIWU7RUBjIvCMsK62w/UKdJWwNCx4in+UdpkTjsfiyMxlgBGLI2g4llawclQp226d3YHhaRrqLI/Z4Xdt3pGA/hkG0HwVGRvHcRoQfcfXfIDyCxK2uWakWHhLzok9SS0c9vdRjrqDsJfp0URDxaUiv7fEwO5njCmd8DBib+wr5o9fRFr/L8PKiI913Ru4StivUWg/cWp0kVtIQ84N56zF3U8AvZgDbSVmisrpHvl4pc6ZTvA6xC0pMM0ASEdrjaCUnn51tcNdmIfK9fDmr6AMFLZtunXqaVg8zmqtT7NFwrgwHutB35h8YRopaTAWNJYe8NlQrNVNxmkCPvbeM6VL8R/H/qHLWY9lzDmqR3KyPyvCO1gwG6SEp/IPvd3P+puoY4cfgCVWQuZpp5ZRauzQqeUZqXpjhhTo7CNA02OtHVf/L+NecPPZQnLoGW159s9D2JLXTtECa0pAuQ=
-      file: ".pioenvs/yun/firmware.hex"
+      file: .pioenvs/yun/firmware.hex
       skip_cleanup: true
