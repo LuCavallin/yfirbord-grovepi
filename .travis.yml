@@ -8,7 +8,7 @@ cache:
     - ".pioenvs"
 
 env:
-  - PLATFORMIO_BUILD_FLAGS='-DMQTT_DSN="something"'
+  - SET PLATFORMIO_BUILD_FLAGS='-DMQTT_HOSTNAME="stuff"' '-DMQTT_USERNAME="stuff"' '-DMQTT_PASSWORD="stuff"'
 
 install:
     - pip install -U platformio
