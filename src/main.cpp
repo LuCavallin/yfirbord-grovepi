@@ -1,15 +1,24 @@
+#include <Bridge.h>
+#include <BridgeClient.h>
+#include <MQTT.h>
 #include <ArduinoJson.h>
 
-#include <MQTTClient.h>
-#include <MQTT.h>
-#include <system.h>
-
+// Sensors and actuators libs
 #include "Ultrasonic.h"
 #include "DHT.h"
 
+// MQTT credentials
+#define MQTT_HOSTNAME
+#define MQTT_USERNAME
+#define MQTT_PASSWORD
+
+// Networking
+BridgeClient net;
+MQTTClient client;
+
+// Sensors and actuators
 #define DHTTYPE DHT11
 
-MQTTClient client;
 int ultrasonicPin = 2;
 int DHTPin = 4;
 int buzzerPin = 8;
@@ -18,19 +27,18 @@ int ledPin = 3;
 DHT dht(DHTPin, DHTTYPE);
 Ultrasonic ultrasonic(ultrasonicPin);
 
+// Program
 void connect()
 {
-    Serial.print("\nConnecting to MQTT...");
+    Serial.print("Connecting...");
     while (!client.connect("arduino", "try", "try"))
     {
         Serial.print(".");
         delay(1000);
     }
 
-    Serial.println("\nconnected!");
-
+    Serial.println("\nConnected!");
     client.subscribe("/hello");
-    // client.unsubscribe("/hello");
 }
 
 void messageReceived(String &topic, String &payload)
@@ -38,26 +46,12 @@ void messageReceived(String &topic, String &payload)
     Serial.println("incoming: " + topic + " - " + payload);
 }
 
-void toggleDigital(int pin, int delayTime)
-{
-    digitalWrite(pin, HIGH);
-    delay(delayTime);
-    digitalWrite(pin, LOW);
-}
-
-void printDHT(float h, int t)
-{
-    Serial.print("Humidity: ");
-    Serial.print(h);
-    Serial.print("\t Temperature: ");
-    Serial.print(t);
-    Serial.println(" *C");
-}
-
 void setup()
 {
-    // MQTT
-    // client.begin("broker.shiftr.io", net);
+    Bridge.begin();
+    Serial.begin(115200);
+
+    client.begin(MQTT_HOSTNAME, net);
     client.onMessage(messageReceived);
     connect();
 
@@ -76,34 +70,23 @@ void loop()
         connect();
     }
 
-    long ultrasonicCentimeters;
+    // read message and operate
 
-    ultrasonicCentimeters = ultrasonic.MeasureInCentimeters(); // two measurements should keep an interval
-    Serial.println(ultrasonicCentimeters);
-    if (ultrasonicCentimeters > 50)
-    {
-        toggleDigital(buzzerPin, 250);
-    }
-    else
-    {
-        toggleDigital(ledPin, 1000);
-    }
-
-    // Reading temperature or humidity takes about 250 milliseconds!
-    // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
-    float h = dht.readHumidity();
-    float t = dht.readTemperature();
-
-    // check if returns are valid, if they are NaN (not a number) then something went wrong!
-    if (isnan(t) || isnan(h))
-    {
-        Serial.println("Failed to read from DHT");
-    }
-    else
-    {
-        printDHT(h, t);
-    }
-
-    Serial.println("\n");
     delay(1000);
+}
+
+void toggleDigital(int pin, int delayTime)
+{
+    digitalWrite(pin, HIGH);
+    delay(delayTime);
+    digitalWrite(pin, LOW);
+}
+
+void printDHT(float h, int t)
+{
+    Serial.print("Humidity: ");
+    Serial.print(h);
+    Serial.print("\t Temperature: ");
+    Serial.print(t);
+    Serial.println(" *C");
 }
