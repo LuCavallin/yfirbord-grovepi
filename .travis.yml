@@ -7,6 +7,9 @@ cache:
     - "~/.platformio"
     - ".pioenvs"
 
+env:
+  - PLATFORMIO_BUILD_FLAGS='-DMQTT_DSN="something"'
+
 install:
     - pip install -U platformio
     - platformio update
