@@ -8,7 +8,9 @@ cache:
     - ".pioenvs"
 
 env:
-  - SET PLATFORMIO_BUILD_FLAGS='-DMQTT_HOSTNAME="stuff"' '-DMQTT_USERNAME="stuff"' '-DMQTT_PASSWORD="stuff"'
+  global:
+    - secure: mCCs+sNKb5uETm+QfqvXMUKaSIaFy6NhMSema6qzCRaW0CH4eSUC4uTxZ4+pshuE+/C8xJICVjrWytTVgeu/iGxZYWnDAkIqn5Not52E11JC+ctm4/YBvK7JJf5jr/DGdASWfAUFHl5iIAh5kJxfgjtRO3SBcHVXYb70GBDNLXpQtwtujZqQ50DBRU9eVK2ObUR/avWTF411Y21mBHCzkywcmZ2wZ3Nv4Ti65F2JyQ5Kz9oPYarZwCMZ67slqrHv/Dy7fDXnsbY7Q5q1zPWRXVecx2mZEB35LItcB20rER0y0Vq7gtmaYwytKCKjCwKCsQqjADpI8vxODK/1mNzQ+cICCIf9lTjp7k2ZeRyjpj/2vFPiEnA9OU53jzZore4EQT64vVnoaMZzgGRgGDu4FILucZ0ZpJMjRKCFcaz/THR88dhehG0eozhpXxknxXGTQgYC7AIZC3Pqq1ljfkqIFba9it0PatOBBvSzmC3YBasmbqWy50sTJLN1C3Hyk7pYl/hU7FrGXHW68k0UuFMwFU7DPPACenxF4s7YedT4QrzRbiPPZIvCrr5PV6rJWjOiCTQmH5n5220i+5PyObG+HntfqW5YmGfqvPI1Os7jbCS4vj6D0Ub9hfNOdmHD5Qd3FKCI5ZIOt4z2QwjS3dqcto68ZwfzM4xDs5kgdmyY+f8=
+    # platformio build flags
 
 install:
     - pip install -U platformio
