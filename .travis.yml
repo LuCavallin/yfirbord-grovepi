@@ -4,18 +4,15 @@ python:
 sudo: false
 cache:
   directories:
-    - "~/.platformio"
-    - ".pioenvs"
-
+  - "~/.platformio"
+  - ".pioenvs"
 env:
   global:
-    - secure: mCCs+sNKb5uETm+QfqvXMUKaSIaFy6NhMSema6qzCRaW0CH4eSUC4uTxZ4+pshuE+/C8xJICVjrWytTVgeu/iGxZYWnDAkIqn5Not52E11JC+ctm4/YBvK7JJf5jr/DGdASWfAUFHl5iIAh5kJxfgjtRO3SBcHVXYb70GBDNLXpQtwtujZqQ50DBRU9eVK2ObUR/avWTF411Y21mBHCzkywcmZ2wZ3Nv4Ti65F2JyQ5Kz9oPYarZwCMZ67slqrHv/Dy7fDXnsbY7Q5q1zPWRXVecx2mZEB35LItcB20rER0y0Vq7gtmaYwytKCKjCwKCsQqjADpI8vxODK/1mNzQ+cICCIf9lTjp7k2ZeRyjpj/2vFPiEnA9OU53jzZore4EQT64vVnoaMZzgGRgGDu4FILucZ0ZpJMjRKCFcaz/THR88dhehG0eozhpXxknxXGTQgYC7AIZC3Pqq1ljfkqIFba9it0PatOBBvSzmC3YBasmbqWy50sTJLN1C3Hyk7pYl/hU7FrGXHW68k0UuFMwFU7DPPACenxF4s7YedT4QrzRbiPPZIvCrr5PV6rJWjOiCTQmH5n5220i+5PyObG+HntfqW5YmGfqvPI1Os7jbCS4vj6D0Ub9hfNOdmHD5Qd3FKCI5ZIOt4z2QwjS3dqcto68ZwfzM4xDs5kgdmyY+f8=
-    # platformio build flags
+    secure: wfvqpac/6UFq7IGj5T5Ilxp4lMOKvlVQNZ3gpGJNUzUC6MhKHXdT9La4AleZMaMnt9a9Liq4+DBFF0yOMDdNTVxq/VEyi/j8U7JIShnyYyFOqXr1fNACsiAzTt4wW2i9t4YpunFfoAo4cdCAmURPMWJDfniF7tCuoukFkX3uGHF62bKhsOtrr9NqrZGTZv3Ke1NAg5D3X94MDAIPlqgj/Ui/XXLUVM9bF/jueYL7UkrWkJKC97N5VQS7jqTgq+QYlfajU8i7m+fdKja4CQhy8aRFY3ghGrt0UkszbeZKj3hd7n87IasJU6N8/H45Yvpf1gO8KjH4IbxjvaSyoiZMqIB/2/FTFh6nesMqMyNkCJcgQs7o5l45vBnaCKLfDs3uOd5mPFGWM2vEs4m61AGKh04ZX29PmtjKmAkgz6rIILx4J3I7WViqPLfw7cXYpf09jaS+CsH+s14BJZYEJue4huSQup2xjyh5nEgsX+tYj4kCO73HtFXVA/uhF26prylqXMJONLvKWqjvP5jMed5POyUH+Dh+SHwkMHOQbJcRXbThQbSDHkSKwEptL5865dp+dJovFHRAJWDqBn5tH+m6bpAyJdjwVPwvQH+XRxwwXkdU3TXOPf+19cIb/tgxRyNFswZ18gB7UuEDdHnVHn0oTFkMV7g9fjbx/pbjWltr0/M=
 
 install:
-    - pip install -U platformio
-    - platformio update
-
+- pip install -U platformio
+- platformio update
 jobs:
   include:
   - stage: build
@@ -26,7 +23,7 @@ jobs:
       provider: releases
       api_key:
         secure: hDWCX/Hv/h1ql7TJQwb+Wzv/fGdIkxNhlRf36XfsN/Bz68HvF8W7zZ6hha/ZbAeZ/2xy+iJ5eBU3e4fya4aDaMdUlIA7vu+zZ872tjlW8qKrVfij4fOcLdgjz/wo6P9qNBfpkXokBimGyMc257TRE7gwa7NQJ6txxSq6Ifuy+fDxOtPNKdkp5VCkOtlJ9Z8QS591NYYZU1El1OgmwvJgMPXl73j8QIWU7RUBjIvCMsK62w/UKdJWwNCx4in+UdpkTjsfiyMxlgBGLI2g4llawclQp226d3YHhaRrqLI/Z4Xdt3pGA/hkG0HwVGRvHcRoQfcfXfIDyCxK2uWakWHhLzok9SS0c9vdRjrqDsJfp0URDxaUiv7fEwO5njCmd8DBib+wr5o9fRFr/L8PKiI913Ru4StivUWg/cWp0kVtIQ84N56zF3U8AvZgDbSVmisrpHvl4pc6ZTvA6xC0pMM0ASEdrjaCUnn51tcNdmIfK9fDmr6AMFLZtunXqaVg8zmqtT7NFwrgwHutB35h8YRopaTAWNJYe8NlQrNVNxmkCPvbeM6VL8R/H/qHLWY9lzDmqR3KyPyvCO1gwG6SEp/IPvd3P+puoY4cfgCVWQuZpp5ZRauzQqeUZqXpjhhTo7CNA02OtHVf/L+NecPPZQnLoGW159s9D2JLXTtECa0pAuQ=
-      file: .pioenvs/yun/firmware.hex
+      file: ".pioenvs/yun/firmware.hex"
       skip_cleanup: true
       on:
         tags: true
