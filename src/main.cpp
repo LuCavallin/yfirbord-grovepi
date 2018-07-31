@@ -25,7 +25,7 @@ Ultrasonic ultrasonic(ultrasonicPin);
 // Program
 void connect()
 {
-    Serial.print("Connecting...");
+    Serial.print("Connecting to MQTT...");
     while (!client.connect("hytta", MQTT_USERNAME, MQTT_PASSWORD))
     {
         Serial.print(".");
