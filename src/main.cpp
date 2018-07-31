@@ -1,17 +1,15 @@
 #include <Bridge.h>
 #include <BridgeClient.h>
-#include <MQTT.h>
 #include <ArduinoJson.h>
+#include <PubSubClient.h>
+
+// Networking
+BridgeClient connection;
 
 // Sensors and actuators libs
 #include "Ultrasonic.h"
 #include "DHT.h"
 
-// Networking
-BridgeClient net;
-MQTTClient client;
-
-// Sensors and actuators
 #define DHTTYPE DHT11
 
 int ultrasonicPin = 2;
@@ -22,66 +20,37 @@ int ledPin = 3;
 DHT dht(DHTPin, DHTTYPE);
 Ultrasonic ultrasonic(ultrasonicPin);
 
+// Setup MQTT
+void onMessageReceived(char *topic, byte *payload, unsigned int length)
+{
+    Serial.println("received");
+    Serial.println(topic);
+}
+
+PubSubClient client(MQTT_HOSTNAME, MQTT_PORT, onMessageReceived, connection);
+
 // Program
-void connect()
-{
-    Serial.print("Connecting to MQTT...");
-    while (!client.connect("hytta", MQTT_USERNAME, MQTT_PASSWORD))
-    {
-        Serial.print(".");
-        delay(1000);
-    }
-
-    Serial.println("\nConnected!");
-    client.subscribe("/hello");
-}
-
-void messageReceived(String &topic, String &payload)
-{
-    Serial.println("incoming: " + topic + " - " + payload);
-}
-
 void setup()
 {
     Bridge.begin();
     Serial.begin(115200);
-
-    client.begin(MQTT_HOSTNAME, net);
-    client.onMessage(messageReceived);
-    connect();
-
-    Serial.begin(9600);
-    dht.begin();
-    pinMode(buzzerPin, OUTPUT);
-    pinMode(ledPin, OUTPUT);
 }
 
 void loop()
 {
     // MQTT
-    client.loop();
     if (!client.connected())
     {
-        connect();
+        if (client.connect("hytta", MQTT_USERNAME, MQTT_PASSWORD))
+        {
+            Serial.println("connected");
+            client.publish("outTopic", "hello world");
+            client.subscribe("outTopic");
+        }
     }
 
-    // read message and operate
-
-    delay(1000);
-}
-
-void toggleDigital(int pin, int delayTime)
-{
-    digitalWrite(pin, HIGH);
-    delay(delayTime);
-    digitalWrite(pin, LOW);
-}
-
-void printDHT(float h, int t)
-{
-    Serial.print("Humidity: ");
-    Serial.print(h);
-    Serial.print("\t Temperature: ");
-    Serial.print(t);
-    Serial.println(" *C");
+    if (client.connected())
+    {
+        client.loop();
+    }
 }
