@@ -7,17 +7,6 @@
 #include "Ultrasonic.h"
 #include "DHT.h"
 
-// MQTT credentials
-#ifndef MQTT_HOSTNAME
-#define MQTT_HOSTNAME ""
-#endif
-#ifndef MQTT_USERNAME
-#define MQTT_USERNAME ""
-#endif
-#ifndef MQTT_PASSWORD
-#define MQTT_PASSWORD ""
-#endif
-
 // Networking
 BridgeClient net;
 MQTTClient client;
@@ -37,7 +26,7 @@ Ultrasonic ultrasonic(ultrasonicPin);
 void connect()
 {
     Serial.print("Connecting...");
-    while (!client.connect("arduino", "try", "try"))
+    while (!client.connect("arduino", MQTT_USERNAME, MQTT_PASSWORD))
     {
         Serial.print(".");
         delay(1000);
