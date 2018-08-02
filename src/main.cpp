@@ -6,7 +6,7 @@
 // Networking
 BridgeClient connection;
 
-// Sensors and actuators libs
+// Sensors and actuators libraries
 #include "Ultrasonic.h"
 #include "DHT.h"
 
