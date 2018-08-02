@@ -41,11 +41,10 @@ void loop()
     // MQTT
     if (!client.connected())
     {
+        Serial.println("Connecting to MQTT...");
         if (client.connect("hytta", MQTT_USERNAME, MQTT_PASSWORD))
         {
-            Serial.println("connected");
-            client.publish("outTopic", "hello world");
-            client.subscribe("outTopic");
+            Serial.println("Connected!");
         }
     }
 
