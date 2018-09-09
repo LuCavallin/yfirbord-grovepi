@@ -8,8 +8,8 @@ import (
 var sensor string
 
 func init() {
+	plotCmd.Flags().StringVarP(&sensor, "sensor", "s", "", "Sensor to display data for")
 	rootCmd.AddCommand(plotCmd)
-	rootCmd.Flags().StringVarP(&sensor, "sensor", "s", "", "Sensor to display data for")
 }
 
 var plotCmd = &cobra.Command{

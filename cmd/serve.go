@@ -16,49 +16,24 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/spf13/cobra"
-	"gobot.io/x/gobot"
-	"gobot.io/x/gobot/drivers/gpio"
-	"gobot.io/x/gobot/drivers/i2c"
-	"gobot.io/x/gobot/platforms/raspi"
-	"time"
 )
 
-// senseCmd represents the sense command
-var senseCmd = &cobra.Command{
-	Use:   "sense",
-	Short: "Start gathering data from sensors",
+// serveCmd represents the serve command
+var serveCmd = &cobra.Command{
+	Use:   "serve",
+	Short: "Start API server [SERVER-SIDE ONLY!]",
+
 	Run: func(cmd *cobra.Command, args []string) {
-		sense()
+		serve()
 	},
 }
 
-var interval int
-
 func init() {
-	senseCmd.Flags().IntVarP(&interval, "interval", "i", 5000, "Polling interval in milliseconds")
-	rootCmd.AddCommand(senseCmd)
+	rootCmd.AddCommand(serveCmd)
 }
 
-func sense() {
-	r := raspi.NewAdaptor()
-	gp := i2c.NewGrovePiDriver(r)
-	//mqttAdaptor := mqtt.NewAdaptorWithAuth();
-	//mqttClient := mqtt.NewDriver(mqttAdaptor, "to")
-
-	led := gpio.NewLedDriver(gp, "D3")
-
-	work := func() {
-		gobot.Every(1*time.Second, func() {
-			led.Toggle()
-		})
-	}
-
-	robot := gobot.NewRobot("hytta",
-		[]gobot.Connection{r},
-		[]gobot.Device{gp, led},
-		work,
-	)
-
-	robot.Start()
+func serve() {
+	fmt.Println("API server running...")
 }
