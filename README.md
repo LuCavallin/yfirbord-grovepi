@@ -1,5 +1,5 @@
 # Hytta
 
-[![Build Status](https://travis-ci.org/lucavallin/hytta-agent.svg?branch=master)](https://travis-ci.org/lucavallin/hytta-agent) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/3dca1197816f40a68aea3e2007f21345)](https://www.codacy.com/app/lucavallin/hytta-agent?utm_source=github.com&utm_medium=referral&utm_content=lucavallin/hytta-agent&utm_campaign=Badge_Grade)
+[![Build Status](https://travis-ci.org/lucavallin/hytta.svg?branch=master)](https://travis-ci.org/lucavallin/hytta) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/20d8f217d7bc424c86a15c1e1dcefe46)](https://www.codacy.com/app/lucavallin/hytta?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=lucavallin/hytta&amp;utm_campaign=Badge_Grade)
 
 Gather and view sensors data from the RaspberryPi. 
