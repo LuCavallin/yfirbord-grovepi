@@ -24,7 +24,7 @@ import (
 // listCmd represents the list command
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "List available sensors",
+	Short: "DEVICE: list connected sensors and actuators",
 	Run: func(cmd *cobra.Command, args []string) {
 		list()
 	},

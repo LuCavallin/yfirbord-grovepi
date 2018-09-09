@@ -27,7 +27,7 @@ import (
 // senseCmd represents the sense command
 var senseCmd = &cobra.Command{
 	Use:   "sense",
-	Short: "Start gathering data from sensors",
+	Short: "DEVICE: start gathering data from sensors",
 	Run: func(cmd *cobra.Command, args []string) {
 		sense()
 	},

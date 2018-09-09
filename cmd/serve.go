@@ -23,7 +23,7 @@ import (
 // serveCmd represents the serve command
 var serveCmd = &cobra.Command{
 	Use:   "serve",
-	Short: "Start API server [SERVER-SIDE ONLY!]",
+	Short: "SERVER: start API",
 
 	Run: func(cmd *cobra.Command, args []string) {
 		serve()

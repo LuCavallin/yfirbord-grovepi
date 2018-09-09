@@ -4,7 +4,7 @@ GOARM=6
 FILES=hytta
 
 build:
-	env GOOS=$(GOOS) GOARCH=$(GOARCH) GOARM=$(GOARM) go build ./cmd/hytta
+	env GOOS=$(GOOS) GOARCH=$(GOARCH) GOARM=$(GOARM) go build
 
 copy:
 	scp $(FILES) pi@raspberrypi.local:/home/pi

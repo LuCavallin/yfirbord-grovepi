@@ -14,7 +14,7 @@ func init() {
 
 var plotCmd = &cobra.Command{
 	Use:   "plot",
-	Short: "Display data as graph",
+	Short: "DEVICE: display data",
 	Run: func(cmd *cobra.Command, args []string) {
 		plot()
 	},

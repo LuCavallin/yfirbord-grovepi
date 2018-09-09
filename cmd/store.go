@@ -24,8 +24,8 @@ import (
 // storeCmd represents the store command
 var storeCmd = &cobra.Command{
 	Use:   "store",
-	Short: "Connects to MQTT and stores incoming data [SERVER-SIDE ONLY!]",
-	Long: `This command is supposed to be used on the server side to store the data coming into the MQTT broker`,
+	Short: "SERVER: stores incoming data",
+	Long: `Use on the server to store data incoming from MQTT`,
 	Run: func(cmd *cobra.Command, args []string) {
 		store()
 	},
