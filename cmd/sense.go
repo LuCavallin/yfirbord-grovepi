@@ -16,9 +16,10 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/spf13/cobra"
 	"gobot.io/x/gobot"
-	"gobot.io/x/gobot/drivers/gpio"
+	"gobot.io/x/gobot/drivers/aio"
 	"gobot.io/x/gobot/drivers/i2c"
 	"gobot.io/x/gobot/platforms/raspi"
 	"time"
@@ -43,20 +44,22 @@ func init() {
 func sense() {
 	r := raspi.NewAdaptor()
 	gp := i2c.NewGrovePiDriver(r)
-	//mqttAdaptor := mqtt.NewAdaptorWithAuth();
-	//mqttClient := mqtt.NewDriver(mqttAdaptor, "to")
-
-	led := gpio.NewLedDriver(gp, "D3")
+	light := aio.NewGroveLightSensorDriver(gp, "A2")
+	sound := aio.NewGroveLightSensorDriver(gp, "A0")
 
 	work := func() {
-		gobot.Every(1*time.Second, func() {
-			led.Toggle()
+		gobot.Every(5*time.Second, func() {
+			lightVal, _ := light.Read()
+			fmt.Printf("Light: %d\n", lightVal)
+
+			soundVal, _ := sound.Read()
+			fmt.Printf("Sound: %d\n", soundVal)
 		})
 	}
 
 	robot := gobot.NewRobot("hytta",
 		[]gobot.Connection{r},
-		[]gobot.Device{gp, led},
+		[]gobot.Device{gp, light, sound},
 		work,
 	)
 

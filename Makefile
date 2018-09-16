@@ -10,4 +10,4 @@ copy:
 	scp $(FILES) pi@raspberrypi.local:/home/pi
 
 run:
-	ssh -t pi@raspberrypi.local './hytta'
+	ssh -t pi@raspberrypi.local './hytta sense'
