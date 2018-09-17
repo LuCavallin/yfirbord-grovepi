@@ -16,13 +16,14 @@
 package cmd
 
 import (
+	"encoding/json"
+	"github.com/lucavallin/hytta/pkg/message"
 	"github.com/spf13/cobra"
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/drivers/aio"
 	"gobot.io/x/gobot/drivers/i2c"
 	"gobot.io/x/gobot/platforms/mqtt"
 	"gobot.io/x/gobot/platforms/raspi"
-	"strconv"
 	"time"
 )
 
@@ -47,7 +48,7 @@ func sense() {
 	gp := i2c.NewGrovePiDriver(r)
 
 	// Find way to handle configuration
-	mqttAdaptor := mqtt.NewAdaptorWithAuth()
+	mqttAdaptor := mqtt.NewAdaptorWithAuth("xxx", "hytta", "xxx", "xxx")
 
 	// Find way to generate sensors in a abstract manner
 	sound := aio.NewGroveSoundSensorDriver(gp, "A0")
@@ -57,13 +58,16 @@ func sense() {
 	work := func() {
 		gobot.Every(10 * time.Second, func() {
 			lightVal, _ := light.Read()
-			mqttAdaptor.Publish("from", []byte(strconv.Itoa(lightVal)))
+			l, _ := json.Marshal(message.NewReading(light.Name(), lightVal))
+			mqttAdaptor.Publish("from", l)
 
 			soundVal, _ := sound.Read()
-			mqttAdaptor.Publish("from", []byte(strconv.Itoa(soundVal)))
+			s, _ := json.Marshal(message.NewReading(sound.Name(), soundVal))
+			mqttAdaptor.Publish("from", s)
 
 			temperatureVal, _ := temperature.Read()
-			mqttAdaptor.Publish("from", []byte(strconv.Itoa(temperatureVal)))
+			t, _ := json.Marshal(message.NewReading(temperature.Name(), temperatureVal))
+			mqttAdaptor.Publish("from", t)
 
 		})
 	}
