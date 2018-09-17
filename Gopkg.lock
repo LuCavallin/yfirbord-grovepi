@@ -2,6 +2,17 @@
 
 
 [[projects]]
+  digest = "1:184008c955d6a3226b700c13ed0e875a7a051a759618f9bccba9b5c99f17faa5"
+  name = "github.com/eclipse/paho.mqtt.golang"
+  packages = [
+    ".",
+    "packets",
+  ]
+  pruneopts = "UT"
+  revision = "36d01c2b4cbeb3d2a12063e4880ce30800af9560"
+  version = "v1.1.1"
+
+[[projects]]
   digest = "1:abeb38ade3f32a92943e5be54f55ed6d6e3b6602761d74b4aab4c9dd45c18abd"
   name = "github.com/fsnotify/fsnotify"
   packages = ["."]
@@ -169,7 +180,7 @@
 
 [[projects]]
   branch = "dev"
-  digest = "1:a9e921b379ba329c9d967978b6efcf6110115a3e8648883819d6f8fdccaab81b"
+  digest = "1:84e6251265a234e35c3af8dd5a4c781099a0f605a56aa2b3dd749e398635c48c"
   name = "gobot.io/x/gobot"
   packages = [
     ".",
@@ -177,11 +188,24 @@
     "drivers/gpio",
     "drivers/i2c",
     "drivers/spi",
+    "platforms/mqtt",
     "platforms/raspi",
     "sysfs",
   ]
   pruneopts = "UT"
   revision = "3358024288bd089351165c394d4dd3e603229ec3"
+
+[[projects]]
+  branch = "master"
+  digest = "1:50095e42352dba1c6ab2cec7e03b24fb4b513123f41d4ab4dbd2627c25fe18b8"
+  name = "golang.org/x/net"
+  packages = [
+    "internal/socks",
+    "proxy",
+    "websocket",
+  ]
+  pruneopts = "UT"
+  revision = "26e67e76b6c3f6ce91f7c52def5af501b4e0f3a2"
 
 [[projects]]
   branch = "master"
@@ -244,8 +268,8 @@
     "github.com/spf13/viper",
     "gobot.io/x/gobot",
     "gobot.io/x/gobot/drivers/aio",
-    "gobot.io/x/gobot/drivers/gpio",
     "gobot.io/x/gobot/drivers/i2c",
+    "gobot.io/x/gobot/platforms/mqtt",
     "gobot.io/x/gobot/platforms/raspi",
   ]
   solver-name = "gps-cdcl"

@@ -5,10 +5,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var sensor string
+var plotSensor string
 
 func init() {
-	plotCmd.Flags().StringVarP(&sensor, "sensor", "s", "", "Sensor to display data for")
+	plotCmd.Flags().StringVarP(&plotSensor, "sensor", "s", "", "Sensor to display data for")
 	rootCmd.AddCommand(plotCmd)
 }
 
