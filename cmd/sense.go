@@ -17,7 +17,9 @@ package cmd
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/lucavallin/hytta/pkg/message"
+	"github.com/lucavallin/hytta/pkg/messages"
 	"github.com/spf13/cobra"
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/drivers/aio"
@@ -36,10 +38,10 @@ var senseCmd = &cobra.Command{
 	},
 }
 
-var interval int
+var interval string
 
 func init() {
-	senseCmd.Flags().IntVarP(&interval, "interval", "i", 5000, "Polling interval in milliseconds")
+	senseCmd.Flags().StringVarP(&interval, "interval", "i", "5000ms", "Polling time interval")
 	rootCmd.AddCommand(senseCmd)
 }
 
@@ -47,28 +49,36 @@ func sense() {
 	r := raspi.NewAdaptor()
 	gp := i2c.NewGrovePiDriver(r)
 
-	// Find way to handle configuration
+	// Configuration management needs to be improved
 	mqttAdaptor := mqtt.NewAdaptorWithAuth("xxx", "hytta", "xxx", "xxx")
-
-	// Find way to generate sensors in a abstract manner
 	sound := aio.NewGroveSoundSensorDriver(gp, "A0")
 	temperature := aio.NewGroveTemperatureSensorDriver(gp, "A1")
 	light := aio.NewGroveLightSensorDriver(gp, "A2")
 
+	timeInterval, err := time.ParseDuration(interval)
+	if err != nil {
+		panic(err)
+	}
+
 	work := func() {
-		gobot.Every(10 * time.Second, func() {
+		gobot.Every(timeInterval, func() {
+
+			// This could well be abstracted to remove code duplication, but since I have no plans to
+			// have more sensors, this is good enough for now
 			lightVal, _ := light.Read()
-			l, _ := json.Marshal(message.NewReading(light.Name(), lightVal))
+			l, e := json.Marshal(messages.NewReading(light.Name(), lightVal))
+			fmt.Println(lightVal, l, e)
 			mqttAdaptor.Publish("from", l)
 
 			soundVal, _ := sound.Read()
-			s, _ := json.Marshal(message.NewReading(sound.Name(), soundVal))
+			s, e := json.Marshal(messages.NewReading(sound.Name(), soundVal))
+			fmt.Println(soundVal, s, e)
 			mqttAdaptor.Publish("from", s)
 
 			temperatureVal, _ := temperature.Read()
-			t, _ := json.Marshal(message.NewReading(temperature.Name(), temperatureVal))
+			t, e := json.Marshal(messages.NewReading(temperature.Name()	, temperatureVal))
+			fmt.Println(temperatureVal, t, e)
 			mqttAdaptor.Publish("from", t)
-
 		})
 	}
 
