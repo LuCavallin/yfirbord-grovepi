@@ -38,48 +38,48 @@ var senseCmd = &cobra.Command{
 	},
 }
 
-var interval string
-
 func init() {
 	senseCmd.Flags().StringVarP(&interval, "interval", "i", "5000ms", "Polling time interval")
 	rootCmd.AddCommand(senseCmd)
 }
 
-func sense() {
-	r := raspi.NewAdaptor()
-	gp := i2c.NewGrovePiDriver(r)
+type Sensor interface {
+	Read() (int, error)
+}
+var (
+	interval string
+	r = raspi.NewAdaptor()
+	gp = i2c.NewGrovePiDriver(r)
+	// This could be improved with an abstract factory or something similar.
+	// Pin configuration should be moved to a e.g. YAML file
+	sound = aio.NewGroveSoundSensorDriver(gp, "A0")
+	temperature = aio.NewGroveTemperatureSensorDriver(gp, "A1")
+	light = aio.NewGroveLightSensorDriver(gp, "A2")
+)
 
-	// Configuration management needs to be improved
-	mqttConfig, err := conf.NewMqttConfig()
-	if err != nil {
-		log.Fatal("Cannot create MQTT configuration from the env variables.")
-	}
-	mqttAdaptor := mqtt.NewAdaptorWithAuth(mqttConfig.Host, mqttConfig.ClientId, mqttConfig.Username, mqttConfig.Password)
+
+func sense() {
 	timeInterval, err := time.ParseDuration(interval)
+
+	// MQTT configuration would be better in e.g. a YAML file
+	mqttConfig := conf.NewMqttConfig()
+	mqttAdaptor := mqtt.NewAdaptorWithAuth(mqttConfig.Host, mqttConfig.ClientId, mqttConfig.Username, mqttConfig.Password)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// The following piece presents a horrible degree of duplication, a list of sensors
-	// to range over would be a better solution. At the moment the Gobot library doesn't provide
-	// a common interface/type for readable sensors and I will need to create a wrapper myself
-	sound := aio.NewGroveSoundSensorDriver(gp, "A0")
-	temperature := aio.NewGroveTemperatureSensorDriver(gp, "A1")
-	light := aio.NewGroveLightSensorDriver(gp, "A2")
-
+	sensors := map[string]Sensor{
+		"sound": sound,
+		"temperature": temperature,
+		"light": light,
+	}
 	work := func() {
 		gobot.Every(timeInterval, func() {
-			soundVal, _ := sound.Read()
-			message, _ := json.Marshal(messages.NewReading("sound", soundVal, time.Now()))
-			mqttAdaptor.Publish("from", message)
-
-			temperatureVal, _ := temperature.Read()
-			message, _ = json.Marshal(messages.NewReading("temperature", temperatureVal, time.Now()))
-			mqttAdaptor.Publish("from", message)
-
-			lightVal, _ := light.Read()
-			message, _ = json.Marshal(messages.NewReading("light", lightVal, time.Now()))
-			mqttAdaptor.Publish("from", message)
+			for name, sensor := range sensors {
+				val, _ := sensor.Read()
+				message, _ := json.Marshal(messages.NewReading(name, val, time.Now()))
+				mqttAdaptor.Publish("from", message)
+			}
 		})
 	}
 
