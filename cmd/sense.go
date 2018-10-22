@@ -17,9 +17,9 @@ package cmd
 
 import (
 	"encoding/json"
-	"fmt"
-	"github.com/lucavallin/hytta/pkg/message"
+	"github.com/lucavallin/hytta/pkg/conf"
 	"github.com/lucavallin/hytta/pkg/messages"
+	"github.com/prometheus/common/log"
 	"github.com/spf13/cobra"
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/drivers/aio"
@@ -50,41 +50,42 @@ func sense() {
 	gp := i2c.NewGrovePiDriver(r)
 
 	// Configuration management needs to be improved
-	mqttAdaptor := mqtt.NewAdaptorWithAuth("xxx", "hytta", "xxx", "xxx")
+	mqttConfig, err := conf.NewMqttConfig()
+	if err != nil {
+		log.Fatal("Cannot create MQTT configuration from the env variables.")
+	}
+	mqttAdaptor := mqtt.NewAdaptorWithAuth(mqttConfig.Host, mqttConfig.ClientId, mqttConfig.Username, mqttConfig.Password)
+	timeInterval, err := time.ParseDuration(interval)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// The following piece presents a horrible degree of duplication, a list of sensors
+	// to range over would be a better solution. At the moment the Gobot library doesn't provide
+	// a common interface/type for readable sensors and I will need to create a wrapper myself
 	sound := aio.NewGroveSoundSensorDriver(gp, "A0")
 	temperature := aio.NewGroveTemperatureSensorDriver(gp, "A1")
 	light := aio.NewGroveLightSensorDriver(gp, "A2")
 
-	timeInterval, err := time.ParseDuration(interval)
-	if err != nil {
-		panic(err)
-	}
-
 	work := func() {
 		gobot.Every(timeInterval, func() {
-
-			// This could well be abstracted to remove code duplication, but since I have no plans to
-			// have more sensors, this is good enough for now
-			lightVal, _ := light.Read()
-			l, e := json.Marshal(messages.NewReading(light.Name(), lightVal))
-			fmt.Println(lightVal, l, e)
-			mqttAdaptor.Publish("from", l)
-
 			soundVal, _ := sound.Read()
-			s, e := json.Marshal(messages.NewReading(sound.Name(), soundVal))
-			fmt.Println(soundVal, s, e)
-			mqttAdaptor.Publish("from", s)
+			message, _ := json.Marshal(messages.NewReading("sound", soundVal, time.Now()))
+			mqttAdaptor.Publish("from", message)
 
 			temperatureVal, _ := temperature.Read()
-			t, e := json.Marshal(messages.NewReading(temperature.Name()	, temperatureVal))
-			fmt.Println(temperatureVal, t, e)
-			mqttAdaptor.Publish("from", t)
+			message, _ = json.Marshal(messages.NewReading("temperature", temperatureVal, time.Now()))
+			mqttAdaptor.Publish("from", message)
+
+			lightVal, _ := light.Read()
+			message, _ = json.Marshal(messages.NewReading("light", lightVal, time.Now()))
+			mqttAdaptor.Publish("from", message)
 		})
 	}
 
 	robot := gobot.NewRobot("hytta",
 		[]gobot.Connection{r, mqttAdaptor},
-		[]gobot.Device{gp, light, sound, temperature},
+		[]gobot.Device{gp, sound, temperature, light},
 		work,
 	)
 

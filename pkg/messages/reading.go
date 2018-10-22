@@ -2,12 +2,14 @@ package messages
 
 import "time"
 
+// Reading is a struct containing sensor data for a new reading
 type Reading struct {
-	name string `json:"name"`
-	value interface{} `json:"value"`
-	time time.Time `json:"time"`
+	Name string `json:"name"`
+	Value interface{} `json:"value"`
+	Time time.Time `json:"time"`
 }
 
-func NewReading(name string, value interface{}) *Reading {
-	return &Reading{name, value, time.Now()}
+// NewReading creates a new reading message for transmission of sensors data
+func NewReading(name string, value interface{}, timestamp time.Time) *Reading {
+	return &Reading{name, value, timestamp}
 }
