@@ -35,10 +35,7 @@ func unsetEnvVariables() {
 }
 
 func TestNewMqttConfig(t *testing.T) {
-	cfg, err := NewMqttConfig()
-	if err != nil {
-		t.Error("could not parse env variables into MQTT configuration")
-	}
+	cfg := NewMqttConfig()
 	if cfg.Host != host {
 		t.Errorf("cfg.Host was incorrect, got: %s, want: %s.", cfg.Host, host)
 	}
