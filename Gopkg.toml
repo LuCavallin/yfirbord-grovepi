@@ -48,3 +48,8 @@
 [[constraint]]
   name = "github.com/caarlos0/env"
   version = "3.5.0"
+
+[metadata.heroku]
+  root-package = "github.com/lucavallin/hytta"
+  go-version = "1.11"
+  install = [ "./..." ]
