@@ -16,8 +16,10 @@
 package cmd
 
 import (
-	"fmt"
+	"github.com/lucavallin/hytta/pkg/api"
 	"github.com/spf13/cobra"
+	"log"
+	"net/http"
 )
 
 // serveCmd represents the serve command
@@ -35,5 +37,8 @@ func init() {
 }
 
 func serve() {
-	fmt.Println("API server running...")
+	http.HandleFunc("/", api.RootHandler)
+
+	log.Println("Hytta API server is starting...")
+	log.Fatal(http.ListenAndServe(":80", nil))
 }
