@@ -1,2 +1,2 @@
-web: hytta serve
-worker: hytta store
+web: ./hytta serve
+worker: ./hytta store

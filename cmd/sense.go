@@ -17,7 +17,7 @@ package cmd
 
 import (
 	"encoding/json"
-	"github.com/lucavallin/hytta/pkg/conf"
+	"github.com/lucavallin/hytta/pkg/hytta"
 	"github.com/lucavallin/hytta/pkg/messages"
 	"github.com/prometheus/common/log"
 	"github.com/spf13/cobra"
@@ -43,15 +43,12 @@ func init() {
 	rootCmd.AddCommand(senseCmd)
 }
 
-type Sensor interface {
-	Read() (int, error)
-}
 var (
 	interval string
-	r = raspi.NewAdaptor()
-	gp = i2c.NewGrovePiDriver(r)
 	// This could be improved with an abstract factory or something similar.
 	// Pin configuration should be moved to a e.g. YAML file
+	r = raspi.NewAdaptor()
+	gp = i2c.NewGrovePiDriver(r)
 	sound = aio.NewGroveSoundSensorDriver(gp, "A0")
 	temperature = aio.NewGroveTemperatureSensorDriver(gp, "A1")
 	light = aio.NewGroveLightSensorDriver(gp, "A2")
@@ -60,15 +57,16 @@ var (
 
 func sense() {
 	timeInterval, err := time.ParseDuration(interval)
-
-	// MQTT configuration would be better in e.g. a YAML file
-	mqttConfig := conf.NewMqttConfig()
-	mqttAdaptor := mqtt.NewAdaptorWithAuth(mqttConfig.Host, mqttConfig.ClientId, mqttConfig.Username, mqttConfig.Password)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	sensors := map[string]Sensor{
+	// MQTT configuration would be better in e.g. a YAML file
+	mqttConfig := hytta.NewMqttConfig()
+	mqttAdaptor := mqtt.NewAdaptorWithAuth(mqttConfig.Host, mqttConfig.ClientID, mqttConfig.Username, mqttConfig.Password)
+
+
+	sensors := map[string]hytta.ReadableSensor{
 		"sound": sound,
 		"temperature": temperature,
 		"light": light,
