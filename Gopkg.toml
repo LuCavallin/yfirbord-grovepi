@@ -52,4 +52,4 @@
 [metadata.heroku]
   root-package = "github.com/lucavallin/hytta"
   go-version = "1.11"
-  install = [ "./..." ]
+  install = [ "." ]
