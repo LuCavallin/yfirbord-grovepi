@@ -16,10 +16,12 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/lucavallin/hytta/pkg/api"
 	"github.com/spf13/cobra"
 	"log"
 	"net/http"
+	"os"
 )
 
 // serveCmd represents the serve command
@@ -40,5 +42,17 @@ func serve() {
 	http.HandleFunc("/", api.RootHandler)
 
 	log.Println("Hytta API server is starting...")
-	log.Fatal(http.ListenAndServe(":80", nil))
+	log.Fatal(http.ListenAndServe(GetPort(), nil))
+}
+
+// GetPort from the environment so we can run on Heroku
+func GetPort() string {
+	port := os.Getenv("PORT")
+	// Set a default port if there is nothing in the environment
+	if port == "" {
+		port = "80"
+		fmt.Println("INFO: No PORT environment variable detected, defaulting to " + port)
+	}
+
+	return ":" + port
 }
