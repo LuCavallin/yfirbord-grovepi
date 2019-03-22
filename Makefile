@@ -1,13 +1,13 @@
-GOOS=linux
-GOARCH=arm
-GOARM=6
 FILES=hytta
 
+install:
+	pip install -U platformio
+
 build:
-	env GOOS=$(GOOS) GOARCH=$(GOARCH) GOARM=$(GOARM) go build
+	platformio run
 
 copy:
 	scp $(FILES) pi@raspberrypi.local:/home/pi
 
 run:
-	ssh -t pi@raspberrypi.local './hytta sense'
+	ssh -t pi@raspberrypi.local './hytta'
