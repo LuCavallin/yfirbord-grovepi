@@ -1,15 +1,9 @@
-FILES=hytta
-
-install:
-	pip install -U platformio
-	platformio run
+setup:
+	sudo pip install -U setuptools pip platformio
 
 build:
 	git pull
 	platformio build
-
-copy:
-	scp $(FILES) pi@raspberrypi.local:/home/pi
 
 run:
 	ssh -t pi@raspberrypi.local './hytta'
