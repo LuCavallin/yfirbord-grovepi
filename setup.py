@@ -10,13 +10,13 @@ with open('LICENSE.txt') as f:
     license = f.read()
 
 setup(
-    name='sample',
-    version='0.1.0',
-    description='Sample package description',
+    name='hytta',
+    version='1.0.0',
+    description='Gather and view sensors data from the RaspberryPi.',
     long_description=readme,
-    author='<author_name>',
-    author_email='author@example.com',
-    url='',
+    author='Luca Cavallin',
+    author_email='me@lucavall.in',
+    url='https://lcv.sh',
     license=license,
     packages=find_packages(exclude=('tests'))
 )
