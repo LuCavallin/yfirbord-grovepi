@@ -7,6 +7,9 @@ Gather and view sensors data from the RaspberryPi
 ## Usage
 
 ```
+# Upgrades firmware and packages, sets user permissions to use the GPIO pins
+make setup-pi
+
 # Install dependencies
 make setup
 
