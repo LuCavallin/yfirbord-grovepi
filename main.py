@@ -1,30 +1,26 @@
 import BlynkLib
 from BlynkTimer import BlynkTimer
+from grove.grove_led import GroveLed
+import time
 
 BLYNK_AUTH = 'YourAuthToken'
 
-# Initialize Blynk
+# Initialize Blynk with a BlynkTimer Instance
 blynk = BlynkLib.Blynk(BLYNK_AUTH)
-
-# Create BlynkTimer Instance
 timer = BlynkTimer()
 
-
-# Will only run once after 2 seconds
 def hello_world():
     print("Hello World!")
 
-
-# Will Print Every 5 Seconds
-def print_me():
-    print("Thanks!")
-
-
 # Add Timers
 timer.set_timeout(2, hello_world)
-timer.set_interval(5, print_me)
 
 
+led = GroveLed(5)
 while True:
     blynk.run()
     timer.run()
+    led.on()
+    time.sleep(1)
+    led.off()
+    time.sleep(1)
