@@ -8,3 +8,4 @@
 vendor
 ./hytta
 .idea
+.env

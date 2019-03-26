@@ -3,24 +3,28 @@ from BlynkTimer import BlynkTimer
 from grove.grove_led import GroveLed
 import time
 
-BLYNK_AUTH = 'YourAuthToken'
+# Load configuration
+from os.path import join, dirname
+from dotenv import load_dotenv
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
 
 # Initialize Blynk with a BlynkTimer Instance
+BLYNK_AUTH = os.getenv("BLYNK_AUTH");
 blynk = BlynkLib.Blynk(BLYNK_AUTH)
 timer = BlynkTimer()
 
-def hello_world():
-    print("Hello World!")
-
-# Add Timers
-timer.set_timeout(2, hello_world)
-
-
+# Handlers
 led = GroveLed(5)
-while True:
-    blynk.run()
-    timer.run()
+def toggle_led():
     led.on()
     time.sleep(1)
     led.off()
-    time.sleep(1)
+
+# Add Timers
+timer.set_timeout(1, toggle_led)
+
+# Run
+while True:
+    blynk.run()
+    timer.run()

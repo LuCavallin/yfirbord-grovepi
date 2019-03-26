@@ -1,3 +1,5 @@
 rpi_ws281x
 blynk-library-python
 grove.py
+python-dotenv
+pylama
