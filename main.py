@@ -1,9 +1,10 @@
 import BlynkLib
+import time
+import os
 from BlynkTimer import BlynkTimer
 from grove.grove_led import GroveLed
 from grove.factory import Factory
 from grove.grove_temperature_humidity_sensor import DHT
-import time
 
 # Load configuration
 from os.path import join, dirname
@@ -12,27 +13,31 @@ dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
 # Initialize Blynk with a BlynkTimer Instance
-BLYNK_AUTH = os.getenv("BLYNK_AUTH");
+BLYNK_AUTH = os.getenv("BLYNK_AUTH")
 blynk = BlynkLib.Blynk(BLYNK_AUTH)
 timer = BlynkTimer()
 
 # Handlers
-led = GroveLed(5)
+
+
 def toggle_led(seconds):
+    led = GroveLed(5)
     led.on()
     time.sleep(seconds)
     led.off()
 
-buzzer = Factory.getGpioWrapper("Buzzer", 4)
+
 def buzz(seconds):
+    buzzer = Factory.getGpioWrapper("Buzzer", 4)
     buzzer.on()
     time.sleep(seconds)
     buzzer.off()
 
-dht11 = DHT("11", 16)
-def dht()
+
+def dht():
+    dht11 = DHT("11", 16)
     humidity, temperature = dht11.read()
-    return {temperature: temp, humidity: humidity}
+    return {temperature: temperature, humidity: humidity}
 
 
 # Add Timers
@@ -44,3 +49,4 @@ while True:
     timer.run()
     toggle_led(2)
     buzz(2)
+    print(dht())
