@@ -13,7 +13,3 @@ Monitor the environment in your house with a Particle Photon with Blynk.
 ### App
 
 ![](./docs/app.jpeg)
-
-## TODO
-
-- Setup CI
