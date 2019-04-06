@@ -9,9 +9,13 @@
 #include "blynk.h"
 #include "Ultrasonic.h"
 
+void setup();
+void sendRange();
+void loop();
+#line 12 "/Users/luca/Projects/hytta/src/hytta.ino"
 #define BLYNK_PRINT Serial
 //#define BLYNK_DEBUG
-char blynkAuth[] = "";
+char blynkAuth[] = "74dab704d1824061bb43cf03df866244";
 BlynkTimer timer;
 
 #define PIN_BUZZER D6
