@@ -1,52 +1,90 @@
-/*
- * Project hytta
- * Description: Monitor the environment in your house with a Particle Photon.
- * Author: Luca Cavallin <me@lucavall.in>
- * Date: 05/04/2019
- */
-
-#include "Particle.h"
-#include "blynk.h"
-#include "Ultrasonic.h"
+#include "application.h"
+#line 1 "/Users/luca/Projects/hytta/src/hytta.ino"
+#include "PietteTech_DHT.h"
 
 void setup();
-void sendRange();
 void loop();
-#line 12 "/Users/luca/Projects/hytta/src/hytta.ino"
-#define BLYNK_PRINT Serial
-//#define BLYNK_DEBUG
-char blynkAuth[] = "74dab704d1824061bb43cf03df866244";
-BlynkTimer timer;
+#line 3 "/Users/luca/Projects/hytta/src/hytta.ino"
+#define DHTTYPE DHT11 // Sensor type DHT11/21/22/AM2301/AM2302
+#define DHTPIN D4     // Digital pin for communications
 
-#define PIN_BUZZER D6
-#define PIN_LED D4
-#define PIN_ULTRASONIC D2
-Ultrasonic ultrasonic(PIN_ULTRASONIC);
+// Lib instantiate
+PietteTech_DHT DHT(DHTPIN, DHTTYPE);
+int n; // counter
 
-// setup() runs once, when the device is first turned on.
 void setup()
 {
   Serial.begin(9600);
-  pinMode(PIN_BUZZER, OUTPUT);
-  pinMode(PIN_LED, OUTPUT);
-  Serial.begin(9600);
-
-  // Setup Blynk
-  delay(5000);
-  timer.setInterval(1000L, sendRange);
-  Blynk.begin(blynkAuth);
+  while (!Serial.available() && millis() < 30000)
+  {
+    Serial.println("Press any key to start.");
+    Particle.process();
+    delay(1000);
+  }
+  Serial.println("DHT Simple program using DHT.acquireAndWait");
+  Serial.print("LIB version: ");
+  Serial.println(DHTLIB_VERSION);
+  Serial.println("---------------");
+  DHT.begin();
 }
 
-// Read from ultrasonic ranger and write to Blynk V0
-void sendRange()
-{
-  float cm = ultrasonic.MeasureInCentimeters();
-  Blynk.virtualWrite(0, cm);
-}
-
-// loop() runs over and over again, as quickly as it can execute.
 void loop()
 {
-  Blynk.run();
-  timer.run();
+  Serial.print("\n");
+  Serial.print(n);
+  Serial.print(": Retrieving information from sensor: ");
+  Serial.print("Read sensor: ");
+
+  int result = DHT.acquireAndWait(1000); // wait up to 1 sec (default indefinitely)
+
+  switch (result)
+  {
+  case DHTLIB_OK:
+    Serial.println("OK");
+    break;
+  case DHTLIB_ERROR_CHECKSUM:
+    Serial.println("Error\n\r\tChecksum error");
+    break;
+  case DHTLIB_ERROR_ISR_TIMEOUT:
+    Serial.println("Error\n\r\tISR time out error");
+    break;
+  case DHTLIB_ERROR_RESPONSE_TIMEOUT:
+    Serial.println("Error\n\r\tResponse time out error");
+    break;
+  case DHTLIB_ERROR_DATA_TIMEOUT:
+    Serial.println("Error\n\r\tData time out error");
+    break;
+  case DHTLIB_ERROR_ACQUIRING:
+    Serial.println("Error\n\r\tAcquiring");
+    break;
+  case DHTLIB_ERROR_DELTA:
+    Serial.println("Error\n\r\tDelta time to small");
+    break;
+  case DHTLIB_ERROR_NOTSTARTED:
+    Serial.println("Error\n\r\tNot started");
+    break;
+  default:
+    Serial.println("Unknown error");
+    break;
+  }
+  Serial.print("Humidity (%): ");
+  Serial.println(DHT.getHumidity(), 2);
+
+  Serial.print("Temperature (oC): ");
+  Serial.println(DHT.getCelsius(), 2);
+
+  Serial.print("Temperature (oF): ");
+  Serial.println(DHT.getFahrenheit(), 2);
+
+  Serial.print("Temperature (K): ");
+  Serial.println(DHT.getKelvin(), 2);
+
+  Serial.print("Dew Point (oC): ");
+  Serial.println(DHT.getDewPoint());
+
+  Serial.print("Dew Point Slow (oC): ");
+  Serial.println(DHT.getDewPointSlow());
+
+  n++;
+  delay(2500);
 }
