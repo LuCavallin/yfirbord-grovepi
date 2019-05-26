@@ -29,7 +29,7 @@ void setup()
 }
 
 // Blynk currently handles the waiting time, if this wasn't the case it would be
-// a good rule to wait ~3500ms between each read according to the PietteTech_DHT library
+// a good rule to wait ~2500ms between each read according to the PietteTech_DHT library
 void readDHT()
 {
   int result = DHT.acquireAndWait(1000);
@@ -86,9 +86,11 @@ void readDHT()
   Serial.println(humidity, 2);
   Particle.publish("humidity", String(humidity), PRIVATE);
 
-  // Send data to the Blynk API
+  // Send data to the Blynk API, once for the monitor and once for the graph
   Blynk.virtualWrite(0, temperature);
+  Blynk.virtualWrite(2, temperature);
   Blynk.virtualWrite(1, humidity);
+  Blynk.virtualWrite(3, humidity);
 }
 
 void loop()

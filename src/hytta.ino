@@ -4,7 +4,7 @@
 // Setup Blynk serial output for debug prints and auth
 // (get the auth token in the Blynk app project settings)
 #define BLYNK_PRINT Serial
-char blynkAuth[] = "74dab704d1824061bb43cf03df866244";
+char blynkAuth[] = "";
 BlynkTimer timer;
 
 // Setup DHT sensor DHT11/21/22/AM2301/AM2302 and digital pin (D0 cannot be used)
