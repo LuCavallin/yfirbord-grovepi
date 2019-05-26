@@ -4,12 +4,4 @@
 
 Monitor the environment in your house with a Particle Photon with Blynk.
 
-## Here's what it looks like
-
-### Photon
-
-![](./docs/photon.jpeg)
-
-### App
-
-![](./docs/app.jpeg)
+![](./docs/hytta.png)
