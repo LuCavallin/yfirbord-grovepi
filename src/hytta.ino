@@ -1,85 +1,92 @@
 #include "PietteTech_DHT.h"
+#include <blynk.h>
 
-#define DHTTYPE DHT11 // Sensor type DHT11/21/22/AM2301/AM2302
-#define DHTPIN D4     // Digital pin for communications
+// Setup Blynk serial output for debug prints and auth
+// (get the auth token in the Blynk app project settings)
+#define BLYNK_PRINT Serial
+char blynkAuth[] = "";
+BlynkTimer timer;
 
-// Lib instantiate
+// Setup DHT sensor DHT11/21/22/AM2301/AM2302 and digital pin (D0 cannot be used)
+#define DHTTYPE DHT11
+#define DHTPIN D4
 PietteTech_DHT DHT(DHTPIN, DHTTYPE);
-int n; // counter
 
 void setup()
 {
   Serial.begin(9600);
-  while (!Serial.available() && millis() < 30000)
-  {
-    Serial.println("Press any key to start.");
-    Particle.process();
-    delay(1000);
-  }
-  Serial.println("DHT Simple program using DHT.acquireAndWait");
-  Serial.print("LIB version: ");
-  Serial.println(DHTLIB_VERSION);
-  Serial.println("---------------");
+  delay(5000);
+  // Read sensor once per minute
+  timer.setInterval(60000L, readDHT);
+  Blynk.begin(blynkAuth);
   DHT.begin();
 }
 
-void loop()
+// Blynk currently handles the waiting time, if this wasn't the case it would be
+// a good rule to wait ~3500ms between each read according to the PietteTech_DHT library
+void readDHT()
 {
-  Serial.print("\n");
-  Serial.print(n);
-  Serial.print(": Retrieving information from sensor: ");
-  Serial.print("Read sensor: ");
-
-  int result = DHT.acquireAndWait(1000); // wait up to 1 sec (default indefinitely)
+  int result = DHT.acquireAndWait(1000);
 
   switch (result)
   {
   case DHTLIB_OK:
     Serial.println("OK");
+    Particle.publish("status", "OK", PRIVATE);
     break;
   case DHTLIB_ERROR_CHECKSUM:
     Serial.println("Error\n\r\tChecksum error");
+    Particle.publish("status", "Checksum error", PRIVATE);
     break;
   case DHTLIB_ERROR_ISR_TIMEOUT:
     Serial.println("Error\n\r\tISR time out error");
+    Particle.publish("status", "ISR time out error", PRIVATE);
     break;
   case DHTLIB_ERROR_RESPONSE_TIMEOUT:
     Serial.println("Error\n\r\tResponse time out error");
+    Particle.publish("status", "Response time out error", PRIVATE);
     break;
   case DHTLIB_ERROR_DATA_TIMEOUT:
     Serial.println("Error\n\r\tData time out error");
+    Particle.publish("status", "Data time out error", PRIVATE);
     break;
   case DHTLIB_ERROR_ACQUIRING:
     Serial.println("Error\n\r\tAcquiring");
+    Particle.publish("status", "Acquiring", PRIVATE);
     break;
   case DHTLIB_ERROR_DELTA:
-    Serial.println("Error\n\r\tDelta time to small");
+    Serial.println("Error\n\r\tDelta time too small");
+    Particle.publish("status", "Delta time too small", PRIVATE);
     break;
   case DHTLIB_ERROR_NOTSTARTED:
     Serial.println("Error\n\r\tNot started");
+    Particle.publish("status", "Not started", PRIVATE);
     break;
   default:
     Serial.println("Unknown error");
+    Particle.publish("status", "Unknown error", PRIVATE);
     break;
   }
-  Serial.print("Humidity (%): ");
-  Serial.println(DHT.getHumidity(), 2);
 
+  // Get temperature and humidity, then send some data to serial
+  // and the Particle cloud for debugging
+  float temperature = DHT.getCelsius();
   Serial.print("Temperature (oC): ");
-  Serial.println(DHT.getCelsius(), 2);
+  Serial.println(temperature, 2);
+  Particle.publish("temperature", String(temperature), PRIVATE);
 
-  Serial.print("Temperature (oF): ");
-  Serial.println(DHT.getFahrenheit(), 2);
+  float humidity = DHT.getHumidity();
+  Serial.print("Humidity (%): ");
+  Serial.println(humidity, 2);
+  Particle.publish("humidity", String(humidity), PRIVATE);
 
-  Serial.print("Temperature (K): ");
-  Serial.println(DHT.getKelvin(), 2);
+  // Send data to the Blynk API
+  Blynk.virtualWrite(0, temperature);
+  Blynk.virtualWrite(1, humidity);
+}
 
-  Serial.print("Dew Point (oC): ");
-  Serial.println(DHT.getDewPoint());
-
-  Serial.print("Dew Point Slow (oC): ");
-  Serial.println(DHT.getDewPointSlow());
-
-  n++;
-  delay(2500);
+void loop()
+{
+  Blynk.run();
+  timer.run();
 }
